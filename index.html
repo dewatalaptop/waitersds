@@ -191,7 +191,7 @@
     const stokAwal = {
       lauk: [
         { nama: "Roll top kotak kecil", kapasitas: 20, stok: 5 },
-        { nama: "Roll top sedang", kapasitas: 45, stok: 2 }, // DIPRIORITASKAN
+        { nama: "Roll top sedang", kapasitas: 45, stok: 2 },
         { nama: "Roll top bulat", kapasitas: 30, stok: 3 },
         { nama: "Roll top panjang", kapasitas: 80, stok: 2 }
       ],
@@ -207,7 +207,7 @@
       es: [
         { nama: "Tempat es kecil", kapasitas: 20, stok: 2 },
         { nama: "Tempat es sedang", kapasitas: 40, stok: 1 },
-        { nama: "Tempat es besar", kapasitas: 100, stok: 1 }
+        { nama: "Tempat es besar", kapasitas: 100, stok: 5 } <!-- Perubahan dilakukan di sini -->
       ],
       teh: [
         { nama: "Dispenser teh kecil", kapasitas: 32, stok: 4 },
@@ -265,9 +265,8 @@
           const div = document.createElement("div");
           div.className = "form-group";
           div.innerHTML = 
-            <label>${item.nama} (Kapasitas: ${item.kapasitas})</label>
-            <input type="number" class="input-stok" data-key="${kategori}-${index}" value="${item.stok}" min="0">
-          ;
+            `<label>${item.nama} (Kapasitas: ${item.kapasitas})</label>
+            <input type="number" class="input-stok" data-key="${kategori}-${index}" value="${item.stok}" min="0">`;
           container.appendChild(div);
         });
       }
@@ -330,7 +329,7 @@
 
       for (let alat of stok.lauk) {
         while (sisaLauk > 0 && peserta <= alat.kapasitas && alat.stok > 0) {
-          alokasi.push(${alat.nama} <span class="badge ds">DS</span>);
+          alokasi.push(`${alat.nama} <span class="badge ds">DS</span>`);
           alat.stok--;
           sisaLauk--;
         }
@@ -338,7 +337,7 @@
 
       for (let alat of stok.lauk) {
         while (sisaLauk > 0 && peserta <= alat.kapasitas) {
-          alokasi.push(${alat.nama} <span class="badge sw">SW</span>);
+          alokasi.push(`${alat.nama} <span class="badge sw">SW</span>`);
           sisaLauk--;
         }
       }
@@ -355,15 +354,15 @@
       for (let alat of daftar) {
         if (peserta <= alat.kapasitas && alat.stok > 0) {
           alat.stok--;
-          return ${alat.nama} <span class="badge ds">DS</span>;
+          return `${alat.nama} <span class="badge ds">DS</span>`;
         }
       }
       for (let alat of daftar) {
         if (peserta <= alat.kapasitas) {
-          return ${alat.nama} <span class="badge sw">SW</span>;
+          return `${alat.nama} <span class="badge sw">SW</span>`;
         }
       }
-      return Tambahan ${namaAlat} <span class="badge sw">SW</span>;
+      return `Tambahan ${namaAlat} <span class="badge sw">SW</span>`;
     }
 
     function tampilkanReservasi() {
@@ -373,14 +372,13 @@
         const div = document.createElement("div");
         div.className = "reservation-card";
         div.innerHTML = 
-          <h3>${i + 1}. ${r.nama} - Jam: ${r.jam}</h3>
+          `<h3>${i + 1}. ${r.nama} - Jam: ${r.jam}</h3>
           <p><strong>Tempat:</strong> ${r.tempat}</p>
           <p><strong>Peserta:</strong> ${r.peserta}</p>
           <p><strong>Variasi Lauk:</strong> ${r.jumlahLauk}</p>
           <p><strong>Request:</strong> ${r.request}</p>
           <p><strong>Alokasi Peralatan:</strong></p>
-          <ul>${r.alokasi.map(a => <li>${a}</li>).join("")}</ul>
-        ;
+          <ul>${r.alokasi.map(a => `<li>${a}</li>`).join("")}</ul>`;
         list.appendChild(div);
       });
     }
