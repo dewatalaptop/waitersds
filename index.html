@@ -273,22 +273,11 @@
         padding: 10px 12px;
       }
     }
-    
-    /* Animations */
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    
-    .pulse {
-      animation: pulse 2s infinite;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1 class="pulse">Alokasi Peralatan Reservasi</h1>
+    <h1>Alokasi Peralatan Reservasi</h1>
 
     <div id="stokUpdateSection" style="margin-bottom: 30px;">
       <h2>Update Stok Peralatan</h2>
@@ -451,42 +440,44 @@
       const alokasi = [];
       let sisaLauk = jumlahLauk;
 
-      // Alokasi khusus untuk roll top panjang dengan refill
+      // 1. Alokasi Roll Top Panjang (prioritas utama)
       const rollTopPanjang = stok.lauk.find(a => a.nama === "Roll top panjang");
       if (rollTopPanjang) {
-        const kapasitasPerUnit = 80;
-        const unitDibutuhkan = Math.min(Math.ceil(peserta / kapasitasPerUnit), 3);
+        // Hitung kebutuhan berdasarkan variasi lauk DAN kapasitas
+        const unitDibutuhkan = Math.max(
+          Math.min(Math.ceil(peserta / rollTopPanjang.kapasitas), 3), // Minimal 3 unit untuk 3 lauk
+          jumlahLauk // Tidak boleh kurang dari jumlah variasi lauk
+        );
+        
+        const unitTersedia = Math.min(rollTopPanjang.stok, unitDibutuhkan);
         
         // Alokasi unit yang tersedia
-        const unitTersedia = Math.min(rollTopPanjang.stok, unitDibutuhkan);
         for (let i = 0; i < unitTersedia; i++) {
-          // Selalu tambahkan refill jika peserta > kapasitas per unit
-          const butuhRefill = peserta > kapasitasPerUnit * unitDibutuhkan;
+          const butuhRefill = peserta > rollTopPanjang.kapasitas * unitDibutuhkan;
           alokasi.push(`${rollTopPanjang.nama} <span class="badge ds">DS</span>${butuhRefill ? ' + <span class="badge rf">REFILL</span>' : ''}`);
           rollTopPanjang.stok--;
           sisaLauk--;
         }
 
-        // Unit yang perlu disewa
+        // Handle kekurangan unit
         const unitKurang = unitDibutuhkan - unitTersedia;
         if (unitKurang > 0) {
-          alokasi.push(`${rollTopPanjang.nama} <span class="badge sw">SW</span> + <span class="badge rf">${unitKurang}x REFILL</span>`);
-          sisaLauk--;
+          for (let i = 0; i < unitKurang; i++) {
+            alokasi.push(`${rollTopPanjang.nama} <span class="badge sw">SW</span> + <span class="badge rf">REFILL</span>`);
+            sisaLauk--;
+          }
         }
       }
 
-      // Alokasi untuk peralatan lain dengan refill
+      // 2. Alokasi untuk peralatan lain
       const alokasiDenganRefill = (daftar, jenis) => {
         daftar.sort((a, b) => b.kapasitas - a.kapasitas);
         const alatBesar = daftar.find(a => a.stok > 0);
         
         if (alatBesar) {
           alatBesar.stok--;
-          if (peserta <= alatBesar.kapasitas) {
-            return `${alatBesar.nama} <span class="badge ds">DS</span>`;
-          } else {
-            return `${alatBesar.nama} <span class="badge ds">DS</span> + <span class="badge rf">REFILL</span>`;
-          }
+          const butuhRefill = peserta > alatBesar.kapasitas;
+          return `${alatBesar.nama} <span class="badge ds">DS</span>${butuhRefill ? ' + <span class="badge rf">REFILL</span>' : ''}`;
         }
         return `Tambahan ${jenis} besar <span class="badge sw">SW</span>`;
       };
