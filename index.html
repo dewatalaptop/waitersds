@@ -76,6 +76,10 @@
     .sw {
       background: #dc3545;
     }
+    .rf {
+      background: #ffc107;
+      color: #000;
+    }
   </style>
 </head>
 <body>
@@ -187,7 +191,6 @@
     }
 
     function loadStokFromStorage() {
-      // SELALU gunakan stokAwal tanpa memeriksa localStorage
       return deepCopy(stokAwal);
     }
 
@@ -199,7 +202,7 @@
         const [kategori, index] = input.dataset.key.split("-");
         stokGlobal[kategori][index].stok = parseInt(input.value);
       }
-      alert("Stok berhasil diperbarui (hanya untuk sesi ini)!");
+      alert("Stok berhasil diperbarui (hanya untuk session ini)!");
       document.getElementById("stokForm").style.display = "none";
     }
 
@@ -287,42 +290,50 @@
       const alokasi = [];
       let sisaLauk = jumlahLauk;
 
-      for (let alat of stok.lauk) {
-        while (sisaLauk > 0 && peserta <= alat.kapasitas && alat.stok > 0) {
-          alokasi.push(`${alat.nama} <span class="badge ds">DS</span>`);
-          alat.stok--;
-          sisaLauk--;
-        }
-      }
-
+      // Alokasi lauk
       for (let alat of stok.lauk) {
         while (sisaLauk > 0 && peserta <= alat.kapasitas) {
-          alokasi.push(`${alat.nama} <span class="badge sw">SW</span>`);
-          sisaLauk--;
+          if (alat.stok > 0) {
+            alokasi.push(`${alat.nama} <span class="badge ds">DS</span>`);
+            alat.stok--;
+            sisaLauk--;
+          } else {
+            alokasi.push(`${alat.nama} <span class="badge sw">SW</span>`);
+            sisaLauk--;
+          }
         }
       }
 
-      if (menu.nasi) alokasi.push(cekAlat(peserta, stok.nasi, "magicom"));
-      if (menu.sup) alokasi.push(cekAlat(peserta, stok.sup, "pemanas sup"));
-      if (menu.es) alokasi.push(cekAlat(peserta, stok.es, "tempat es"));
-      if (menu.teh) alokasi.push(cekAlat(peserta, stok.teh, "dispenser teh"));
+      // Fungsi untuk alokasi dengan refill
+      const alokasiDenganRefill = (daftar, jenis) => {
+        // Urutkan dari kapasitas terbesar ke terkecil
+        daftar.sort((a, b) => b.kapasitas - a.kapasitas);
+        
+        // Cari alat terbesar yang tersedia
+        const alatBesar = daftar.find(a => a.stok > 0);
+        
+        if (alatBesar) {
+          if (peserta <= alatBesar.kapasitas) {
+            alatBesar.stok--;
+            return `${alatBesar.nama} <span class="badge ds">DS</span>`;
+          } else if (peserta <= alatBesar.kapasitas * 2) {
+            alatBesar.stok--;
+            return `${alatBesar.nama} <span class="badge ds">DS</span> + <span class="badge rf">REFILL</span>`;
+          } else if (peserta <= alatBesar.kapasitas * 3) {
+            alatBesar.stok--;
+            return `${alatBesar.nama} <span class="badge ds">DS</span> + <span class="badge rf">2x REFILL</span>`;
+          }
+        }
+        return `Tambahan ${jenis} besar <span class="badge sw">SW</span>`;
+      };
+
+      // Alokasi peralatan lain dengan refill
+      if (menu.nasi) alokasi.push(alokasiDenganRefill(stok.nasi, "Magicom"));
+      if (menu.sup) alokasi.push(alokasiDenganRefill(stok.sup, "Pemanas sup"));
+      if (menu.es) alokasi.push(alokasiDenganRefill(stok.es, "Tempat es"));
+      if (menu.teh) alokasi.push(alokasiDenganRefill(stok.teh, "Dispenser teh"));
 
       return alokasi;
-    }
-
-    function cekAlat(peserta, daftar, namaAlat) {
-      for (let alat of daftar) {
-        if (peserta <= alat.kapasitas && alat.stok > 0) {
-          alat.stok--;
-          return `${alat.nama} <span class="badge ds">DS</span>`;
-        }
-      }
-      for (let alat of daftar) {
-        if (peserta <= alat.kapasitas) {
-          return `${alat.nama} <span class="badge sw">SW</span>`;
-        }
-      }
-      return `Tambahan ${namaAlat} <span class="badge sw">SW</span>`;
     }
 
     function tampilkanReservasi() {
