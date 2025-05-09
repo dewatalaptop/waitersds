@@ -1,80 +1,121 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Alokasi Peralatan Reservasi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f0f0f5;
+      background: linear-gradient(to right, #f0f4f8, #e0f0ff);
       margin: 0;
       padding: 20px;
+      font-size: 16px;
+      line-height: 1.6;
     }
+
     h1, h2, h3 {
       text-align: center;
-      color: #333;
+      color: #2c3e50;
     }
+
     .container {
-      max-width: 900px;
+      max-width: 960px;
       margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
+
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
+
     label {
       display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
     }
-    input[type="text"], input[type="time"], input[type="number"], input[type="password"], textarea, select {
+
+    input[type="text"], input[type="time"], input[type="number"], input[type="password"],
+    textarea, select {
       width: 100%;
-      padding: 8px;
-      border-radius: 4px;
+      padding: 10px 12px;
+      border-radius: 6px;
       border: 1px solid #ccc;
+      font-size: 16px;
     }
+
     textarea {
       resize: vertical;
     }
+
     .checkbox-group label {
       display: inline-block;
       margin-right: 15px;
       font-weight: normal;
     }
+
     .btn {
-      background: #28a745;
+      background: #007bff;
       color: white;
-      padding: 10px 15px;
+      padding: 12px 18px;
       border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .btn:hover {
-      background: #218838;
-    }
-    .reservation-card {
-      background: #f9f9f9;
-      border: 1px solid #ddd;
-      margin-top: 20px;
-      padding: 15px;
       border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+
+    .reservation-card {
+      background: #fdfdfd;
+      border: 1px solid #ddd;
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 8px;
+      transition: box-shadow 0.2s ease;
+    }
+
+    .reservation-card:hover {
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
     .badge {
       display: inline-block;
-      padding: 3px 7px;
+      padding: 4px 8px;
       border-radius: 4px;
-      font-size: 12px;
+      font-size: 13px;
       color: #fff;
-      margin-left: 5px;
+      margin-left: 6px;
     }
+
     .ds {
       background: #28a745;
     }
+
     .sw {
       background: #dc3545;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      input, select, textarea, .btn {
+        font-size: 14px;
+      }
+
+      .btn {
+        width: 100%;
+        margin-top: 10px;
+      }
     }
   </style>
 </head>
@@ -86,7 +127,7 @@
       <h2>Update Stok Peralatan</h2>
       <div class="form-group">
         <label>Kode PIN</label>
-        <input type="password" id="pinInput" placeholder="Masukkan 6 digit PIN">
+        <input type="password" id="pinInput" placeholder="Masukkan 6 digit PIN" />
       </div>
       <button onclick="cekPIN()" class="btn">Masuk</button>
       <div id="stokForm" style="display:none; margin-top:20px;"></div>
@@ -95,27 +136,27 @@
     <form id="reservationForm">
       <div class="form-group">
         <label>Nama Reservasi</label>
-        <input type="text" id="nama" required>
+        <input type="text" id="nama" required />
       </div>
       <div class="form-group">
         <label>Jam Reservasi</label>
-        <input type="time" id="jam" required>
+        <input type="time" id="jam" required />
       </div>
       <div class="form-group">
         <label>Jumlah Peserta</label>
-        <input type="number" id="peserta" min="1" required>
+        <input type="number" id="peserta" min="1" required />
       </div>
       <div class="form-group">
         <label>Jumlah Variasi Lauk</label>
-        <input type="number" id="jumlahLauk" min="0" required>
+        <input type="number" id="jumlahLauk" min="0" required />
       </div>
       <div class="form-group">
         <label>Menu Tambahan</label>
         <div class="checkbox-group">
-          <label><input type="checkbox" id="menuNasi"> Nasi</label>
-          <label><input type="checkbox" id="menuSup"> Sup</label>
-          <label><input type="checkbox" id="menuEs"> Es Batu</label>
-          <label><input type="checkbox" id="menuTeh"> Teh</label>
+          <label><input type="checkbox" id="menuNasi" /> Nasi</label>
+          <label><input type="checkbox" id="menuSup" /> Sup</label>
+          <label><input type="checkbox" id="menuEs" /> Es Batu</label>
+          <label><input type="checkbox" id="menuTeh" /> Teh</label>
         </div>
       </div>
       <div class="form-group">
@@ -150,8 +191,8 @@
     const stokAwal = {
       lauk: [
         { nama: "Roll top kotak kecil", kapasitas: 20, stok: 5 },
+        { nama: "Roll top sedang", kapasitas: 45, stok: 2 }, // DIPRIORITASKAN
         { nama: "Roll top bulat", kapasitas: 30, stok: 3 },
-        { nama: "Roll top sedang", kapasitas: 45, stok: 2 },
         { nama: "Roll top panjang", kapasitas: 80, stok: 2 }
       ],
       nasi: [
@@ -338,7 +379,7 @@
           <p><strong>Variasi Lauk:</strong> ${r.jumlahLauk}</p>
           <p><strong>Request:</strong> ${r.request}</p>
           <p><strong>Alokasi Peralatan:</strong></p>
-          <ul>${r.alokasi.map(a => `<li>${a}</li>`).join('')}</ul>
+          <ul>${r.alokasi.map(a => `<li>${a}</li>`).join("")}</ul>
         `;
         list.appendChild(div);
       });
@@ -346,3 +387,4 @@
   </script>
 </body>
 </html>
+
