@@ -443,17 +443,20 @@
       // 1. Alokasi Roll Top Panjang (prioritas utama)
       const rollTopPanjang = stok.lauk.find(a => a.nama === "Roll top panjang");
       if (rollTopPanjang) {
-        // Hitung kebutuhan berdasarkan variasi lauk DAN kapasitas
-        const unitDibutuhkan = Math.max(
-          Math.min(Math.ceil(peserta / rollTopPanjang.kapasitas), 3), // Minimal 3 unit untuk 3 lauk
-          jumlahLauk // Tidak boleh kurang dari jumlah variasi lauk
+        // Hitung kebutuhan berdasarkan peserta DAN variasi lauk
+        const unitDibutuhkan = Math.min(
+          Math.max(
+            Math.ceil(peserta / rollTopPanjang.kapasitas), // Kebutuhan berdasarkan peserta
+            jumlahLauk // Minimal sesuai variasi lauk
+          ),
+          3 // Maksimal 3 unit
         );
-        
+
         const unitTersedia = Math.min(rollTopPanjang.stok, unitDibutuhkan);
         
         // Alokasi unit yang tersedia
         for (let i = 0; i < unitTersedia; i++) {
-          const butuhRefill = peserta > rollTopPanjang.kapasitas * unitDibutuhkan;
+          const butuhRefill = peserta > (unitDibutuhkan * rollTopPanjang.kapasitas);
           alokasi.push(`${rollTopPanjang.nama} <span class="badge ds">DS</span>${butuhRefill ? ' + <span class="badge rf">REFILL</span>' : ''}`);
           rollTopPanjang.stok--;
           sisaLauk--;
@@ -472,14 +475,23 @@
       // 2. Alokasi untuk peralatan lain
       const alokasiDenganRefill = (daftar, jenis) => {
         daftar.sort((a, b) => b.kapasitas - a.kapasitas);
-        const alatBesar = daftar.find(a => a.stok > 0);
         
-        if (alatBesar) {
-          alatBesar.stok--;
-          const butuhRefill = peserta > alatBesar.kapasitas;
-          return `${alatBesar.nama} <span class="badge ds">DS</span>${butuhRefill ? ' + <span class="badge rf">REFILL</span>' : ''}`;
+        // Cari alat yang cukup kapasitasnya
+        const alatCukup = daftar.find(a => a.stok > 0 && peserta <= a.kapasitas);
+        if (alatCukup) {
+          alatCukup.stok--;
+          return `${alatCukup.nama} <span class="badge ds">DS</span>`;
         }
-        return `Tambahan ${jenis} besar <span class="badge sw">SW</span>`;
+        
+        // Jika tidak ada yang cukup, cari yang terbesar
+        const alatTerbesar = daftar.find(a => a.stok > 0);
+        if (alatTerbesar) {
+          alatTerbesar.stok--;
+          const butuhRefill = peserta > alatTerbesar.kapasitas;
+          return `${alatTerbesar.nama} <span class="badge ds">DS</span>${butuhRefill ? ' + <span class="badge rf">REFILL</span>' : ''}`;
+        }
+        
+        return `Tambahan ${jenis} <span class="badge sw">SW</span>`;
       };
 
       if (menu.nasi) alokasi.push(alokasiDenganRefill(stok.nasi, "Magicom"));
