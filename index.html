@@ -1,139 +1,159 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Sistem alokasi reservasi Dolan Sawah</title>
+  <title>Alokasi Peralatan Restoran</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      margin: 0;
-      padding: 0 20px;
-    }
-    header {
-      background: #4CAF50;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-    }
-    section {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    label, select, input[type="number"], button {
-      display: block;
-      margin: 10px 0;
-    }
-    input, select {
-      width: 100%;
-      padding: 8px;
-    }
-    button {
-      padding: 10px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background: #45a049;
-    }
-    .output {
-      white-space: pre-wrap;
-      background: #f1f1f1;
-      padding: 15px;
-      border-radius: 6px;
-      margin-top: 15px;
-      font-family: monospace;
-    }
+    body { font-family: sans-serif; }
+    input, select, button { margin: 5px; padding: 5px; }
+    .badge { padding: 3px 6px; border-radius: 4px; color: white; font-size: 0.8em; }
+    .ds { background-color: green; }
+    .sw { background-color: red; }
   </style>
 </head>
 <body>
-  <header>Sistem alokasi reservasi Dolan Sawah</header>
 
-  <section>
-    <h2>Formulir Reservasi</h2>
-    <label>Nama:</label>
-    <input type="text" id="nama">
+<h2>Form Reservasi</h2>
+<form id="form">
+  Nama: <input type="text" id="nama"><br>
+  Jam: <input type="time" id="jam"><br>
+  Peserta: <input type="number" id="peserta"><br>
+  Jumlah Lauk: <input type="number" id="lauk"><br>
+  Menu: 
+  <label><input type="checkbox" id="nasi"> Nasi</label>
+  <label><input type="checkbox" id="sup"> Sup</label>
+  <label><input type="checkbox" id="es"> Es</label>
+  <label><input type="checkbox" id="teh"> Teh</label><br>
+  <button type="submit">Cek Alokasi</button>
+</form>
 
-    <label>Jam Reservasi:</label>
-    <input type="time" id="jam">
+<h3>Hasil Alokasi:</h3>
+<ul id="hasil"></ul>
 
-    <label>Jumlah Peserta:</label>
-    <input type="number" id="peserta">
+<script>
+const stok = {
+  lauk: [
+    { nama: "Roll top besar", kapasitas: 100, stok: 2 },
+    { nama: "Roll top sedang", kapasitas: 60, stok: 4 },
+    { nama: "Roll top kecil", kapasitas: 40, stok: 6 }
+  ],
+  nasi: [
+    { nama: "Magicom besar", kapasitas: 50, stok: 2 },
+    { nama: "Magicom kecil", kapasitas: 20, stok: 3 }
+  ],
+  sup: [
+    { nama: "Pemanas sup besar", kapasitas: 40, stok: 2 },
+    { nama: "Pemanas sup kecil", kapasitas: 20, stok: 3 }
+  ],
+  es: [
+    { nama: "Tempat es besar", kapasitas: 100, stok: 5 }
+  ],
+  teh: [
+    { nama: "Dispenser teh besar", kapasitas: 50, stok: 2 }
+  ]
+};
 
-    <label>Jumlah Lauk:</label>
-    <input type="number" id="lauk">
+const reservasi = [];
 
-    <label>Pilih Menu:</label>
-    <label><input type="checkbox" id="ayam"> Ayam Bakar</label>
-    <label><input type="checkbox" id="lele"> Lele</label>
-    <label><input type="checkbox" id="nila"> Nila</label>
+const durasiReservasiMs = 3.5 * 60 * 60 * 1000;
 
-    <button onclick="prosesReservasi()">Proses Reservasi</button>
-  </section>
+document.getElementById("form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const nama = document.getElementById("nama").value;
+  const jam = document.getElementById("jam").value;
+  const peserta = parseInt(document.getElementById("peserta").value);
+  const lauk = parseInt(document.getElementById("lauk").value);
+  const menu = {
+    nasi: document.getElementById("nasi").checked,
+    sup: document.getElementById("sup").checked,
+    es: document.getElementById("es").checked,
+    teh: document.getElementById("teh").checked
+  };
 
-  <section>
-    <h2>Output Alokasi</h2>
-    <div class="output" id="output"></div>
-    <button onclick="bagikanWhatsApp()">Bagikan via WhatsApp</button>
-  </section>
+  const jamMs = waktuKeMs(jam);
+  const stokAktif = JSON.parse(JSON.stringify(stok));
 
-  <script>
-    function prosesReservasi() {
-      const nama = document.getElementById('nama').value;
-      const jam = document.getElementById('jam').value;
-      const peserta = parseInt(document.getElementById('peserta').value);
-      const lauk = parseInt(document.getElementById('lauk').value);
-      const menu = {
-        ayam: document.getElementById('ayam').checked,
-        lele: document.getElementById('lele').checked,
-        nila: document.getElementById('nila').checked
-      };
+  for (let r of reservasi) {
+    const rJamMs = waktuKeMs(r.jam);
+    const jarak = Math.abs(jamMs - rJamMs);
+    if (jarak < durasiReservasiMs) {
+      kurangiStok(stokAktif, r.alat);
+    }
+  }
 
-      const alokasi = [];
-      const alat = [
-        { nama: 'Roll Top Besar', kapasitas: 30 },
-        { nama: 'Roll Top Sedang', kapasitas: 20 },
-        { nama: 'Roll Top Kecil', kapasitas: 10 }
-      ];
+  const alat = hitungAlokasi(peserta, lauk, menu, stokAktif);
+  reservasi.push({ nama, jam, alat });
 
-      let sisa = peserta;
-      for (const a of alat) {
-        let jumlah = Math.floor(sisa / a.kapasitas);
-        if (jumlah > 0) {
-          alokasi.push(`${jumlah}x ${a.nama}`);
-          sisa -= jumlah * a.kapasitas;
+  const hasil = document.getElementById("hasil");
+  hasil.innerHTML = `<li><b>${nama}</b> - ${jam}<br>${alat.join("<br>")}</li>`;
+});
+
+function waktuKeMs(waktu) {
+  const [jam, menit] = waktu.split(":").map(Number);
+  return jam * 3600000 + menit * 60000;
+}
+
+function kurangiStok(stok, alatList) {
+  for (let item of alatList) {
+    let nama = item.replace(/ <span.*$/, "").replace(" Refill", "");
+    for (let kategori in stok) {
+      for (let alat of stok[kategori]) {
+        if (alat.nama === nama && alat.stok > 0) {
+          alat.stok--;
+          break;
         }
       }
-
-      if (sisa > 0) {
-        alokasi.push('Refill atau sewa tambahan');
-      }
-
-      let outputText = `Nama: ${nama}\n`;
-      outputText += `Jam: ${jam}\n`;
-      outputText += `Jumlah Peserta: ${peserta}\n`;
-      outputText += `Jumlah Lauk: ${lauk}\n`;
-      outputText += `Menu: ${Object.keys(menu).filter(k => menu[k]).join(', ') || '-' }\n`;
-      outputText += `Alokasi Alat:\n- ${alokasi.join('\n- ')}`;
-
-      document.getElementById('output').innerText = outputText;
     }
+  }
+}
 
-    function bagikanWhatsApp() {
-      const pesan = document.getElementById('output').innerText;
-      const encoded = encodeURIComponent(pesan);
-      const nomor = "6285601393640";
-      const url = `https://wa.me/${nomor}?text=${encoded}`;
-      window.open(url, '_blank');
+function hitungAlokasi(peserta, jumlahLauk, menu, stok) {
+  const alokasi = [];
+  let sisaLauk = jumlahLauk;
+
+  // Urutkan prioritas kapasitas besar dulu
+  const laukPrioritas = stok.lauk.sort((a, b) => b.kapasitas - a.kapasitas);
+
+  for (let alat of laukPrioritas) {
+    while (sisaLauk > 0 && peserta <= alat.kapasitas && alat.stok > 0) {
+      let refill = peserta > 80 && alat.kapasitas >= 80 ? " Refill" : "";
+      alokasi.push(`${alat.nama}${refill} <span class="badge ds">DS</span>`);
+      alat.stok--;
+      sisaLauk--;
     }
-  </script>
+  }
+
+  for (let alat of laukPrioritas) {
+    while (sisaLauk > 0 && peserta <= alat.kapasitas) {
+      let refill = peserta > 80 && alat.kapasitas >= 80 ? " Refill" : "";
+      alokasi.push(`${alat.nama}${refill} <span class="badge sw">SW</span>`);
+      sisaLauk--;
+    }
+  }
+
+  if (menu.nasi) alokasi.push(cekAlat(peserta, stok.nasi, "magicom"));
+  if (menu.sup) alokasi.push(cekAlat(peserta, stok.sup, "pemanas sup"));
+  if (menu.es) alokasi.push(cekAlat(peserta, stok.es, "tempat es"));
+  if (menu.teh) alokasi.push(cekAlat(peserta, stok.teh, "dispenser teh"));
+
+  return alokasi;
+}
+
+function cekAlat(peserta, list, jenis) {
+  for (let alat of list) {
+    if (peserta <= alat.kapasitas && alat.stok > 0) {
+      alat.stok--;
+      return `${alat.nama} <span class="badge ds">DS</span>`;
+    }
+  }
+  for (let alat of list) {
+    if (peserta <= alat.kapasitas) {
+      return `${alat.nama} <span class="badge sw">SW</span>`;
+    }
+  }
+  return `${jenis} tidak tersedia`;
+}
+</script>
+
 </body>
 </html>
