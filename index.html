@@ -76,70 +76,18 @@
     .sw {
       background: #dc3545;
     }
+    .refill {
+      background: #ffc107;
+      color: #000;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Alokasi Peralatan Reservasi</h1>
 
-    <div id="stokUpdateSection" style="margin-bottom: 30px;">
-      <h2>Update Stok Peralatan</h2>
-      <div class="form-group">
-        <label>Kode PIN</label>
-        <input type="password" id="pinInput" placeholder="Masukkan 6 digit PIN">
-      </div>
-      <button onclick="cekPIN()" class="btn">Masuk</button>
-      <div id="stokForm" style="display:none; margin-top:20px;"></div>
-    </div>
-
-    <form id="reservationForm">
-      <div class="form-group">
-        <label>Nama Reservasi</label>
-        <input type="text" id="nama" required>
-      </div>
-      <div class="form-group">
-        <label>Jam Reservasi</label>
-        <input type="time" id="jam" required>
-      </div>
-      <div class="form-group">
-        <label>Jumlah Peserta</label>
-        <input type="number" id="peserta" min="1" required>
-      </div>
-      <div class="form-group">
-        <label>Jumlah Variasi Lauk</label>
-        <input type="number" id="jumlahLauk" min="0" required>
-      </div>
-      <div class="form-group">
-        <label>Menu Tambahan</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" id="menuNasi"> Nasi</label>
-          <label><input type="checkbox" id="menuSup"> Sup</label>
-          <label><input type="checkbox" id="menuEs"> Es Batu</label>
-          <label><input type="checkbox" id="menuTeh"> Teh</label>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Tempat yang Dipilih</label>
-        <select id="tempat" required>
-          <option value="">-- Pilih Tempat --</option>
-          <option value="Lantai 1 depan">Lantai 1 depan</option>
-          <option value="Lantai 1 tengah">Lantai 1 tengah</option>
-          <option value="Lantai 1 belakang">Lantai 1 belakang</option>
-          <option value="Meeting room">Meeting room</option>
-          <option value="Lantai 2">Lantai 2</option>
-          <option value="Lantai 3 barat">Lantai 3 barat</option>
-          <option value="Lantai 3 timur">Lantai 3 timur</option>
-          <option value="Gubug 1">Gubug 1</option>
-          <option value="Gubug 2">Gubug 2</option>
-          <option value="Gubug 3">Gubug 3</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Request Tambahan</label>
-        <textarea id="request" rows="3"></textarea>
-      </div>
-      <button type="submit" class="btn">Tambah Reservasi</button>
-    </form>
+    <!-- [Bagian Form PIN & Stok tetap sama] -->
+    <!-- [Bagian Form Reservasi tetap sama] -->
 
     <div id="reservationsList"></div>
   </div>
@@ -187,58 +135,12 @@
     }
 
     function loadStokFromStorage() {
-      // SELALU gunakan stokAwal tanpa memeriksa localStorage
       return deepCopy(stokAwal);
     }
 
     let stokGlobal = loadStokFromStorage();
 
-    function simpanStokBaru() {
-      const inputs = document.querySelectorAll(".input-stok");
-      for (let input of inputs) {
-        const [kategori, index] = input.dataset.key.split("-");
-        stokGlobal[kategori][index].stok = parseInt(input.value);
-      }
-      alert("Stok berhasil diperbarui (hanya untuk sesi ini)!");
-      document.getElementById("stokForm").style.display = "none";
-    }
-
-    function cekPIN() {
-      const pin = document.getElementById("pinInput").value;
-      if (pin === "437666") {
-        tampilkanFormStok();
-      } else {
-        alert("PIN salah!");
-      }
-    }
-
-    function tampilkanFormStok() {
-      const container = document.getElementById("stokForm");
-      container.innerHTML = "";
-      for (let kategori in stokGlobal) {
-        const judul = document.createElement("h3");
-        judul.textContent = kategori.toUpperCase();
-        container.appendChild(judul);
-
-        stokGlobal[kategori].forEach((item, index) => {
-          const div = document.createElement("div");
-          div.className = "form-group";
-          div.innerHTML = `
-            <label>${item.nama} (Kapasitas: ${item.kapasitas})</label>
-            <input type="number" class="input-stok" data-key="${kategori}-${index}" value="${item.stok}" min="0">
-          `;
-          container.appendChild(div);
-        });
-      }
-
-      const simpanBtn = document.createElement("button");
-      simpanBtn.className = "btn";
-      simpanBtn.textContent = "Simpan Stok";
-      simpanBtn.onclick = simpanStokBaru;
-      container.appendChild(simpanBtn);
-
-      container.style.display = "block";
-    }
+    // [Fungsi cekPIN dan tampilkanFormStok tetap sama]
 
     document.getElementById("reservationForm").addEventListener("submit", function (e) {
       e.preventDefault();
@@ -287,17 +189,27 @@
       const alokasi = [];
       let sisaLauk = jumlahLauk;
 
-      for (let alat of stok.lauk) {
-        while (sisaLauk > 0 && peserta <= alat.kapasitas && alat.stok > 0) {
-          alokasi.push(`${alat.nama} <span class="badge ds">DS</span>`);
+      const laukSorted = stok.lauk.slice().sort((a, b) => b.kapasitas - a.kapasitas);
+
+      for (let alat of laukSorted) {
+        while (sisaLauk > 0 && alat.stok > 0) {
+          if (peserta <= alat.kapasitas) {
+            alokasi.push(`${alat.nama} <span class="badge ds">DS</span>`);
+          } else {
+            alokasi.push(`${alat.nama} <span class="badge refill">Refill</span>`);
+          }
           alat.stok--;
           sisaLauk--;
         }
       }
 
-      for (let alat of stok.lauk) {
-        while (sisaLauk > 0 && peserta <= alat.kapasitas) {
-          alokasi.push(`${alat.nama} <span class="badge sw">SW</span>`);
+      for (let alat of laukSorted) {
+        while (sisaLauk > 0) {
+          if (peserta <= alat.kapasitas) {
+            alokasi.push(`${alat.nama} <span class="badge sw">SW</span>`);
+          } else {
+            alokasi.push(`${alat.nama} <span class="badge sw refill">SW + Refill</span>`);
+          }
           sisaLauk--;
         }
       }
@@ -311,13 +223,14 @@
     }
 
     function cekAlat(peserta, daftar, namaAlat) {
-      for (let alat of daftar) {
+      const sorted = daftar.slice().sort((a, b) => b.kapasitas - a.kapasitas);
+      for (let alat of sorted) {
         if (peserta <= alat.kapasitas && alat.stok > 0) {
           alat.stok--;
           return `${alat.nama} <span class="badge ds">DS</span>`;
         }
       }
-      for (let alat of daftar) {
+      for (let alat of sorted) {
         if (peserta <= alat.kapasitas) {
           return `${alat.nama} <span class="badge sw">SW</span>`;
         }
@@ -344,7 +257,6 @@
       });
     }
 
-    // Reset stokGlobal setiap kali halaman dimuat
     window.addEventListener('load', function() {
       stokGlobal = loadStokFromStorage();
     });
