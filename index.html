@@ -1,60 +1,143 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Alokasi Peralatan Reservasi</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    /* CSS tetap seperti sebelumnya tanpa perubahan */
-    /* ... (potongan CSS dipertahankan, Anda tidak perlu mengubah) ... */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f5;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="time"], input[type="number"], input[type="password"], textarea, select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .checkbox-group label {
+      display: inline-block;
+      margin-right: 15px;
+      font-weight: normal;
+    }
+    .btn {
+      background: #28a745;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #218838;
+    }
+    .reservation-card {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 7px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #fff;
+      margin-left: 5px;
+    }
+    .ds {
+      background: #28a745;
+    }
+    .sw {
+      background: #dc3545;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Alokasi Peralatan Reservasi</h1>
-    <!-- Form Update Stok -->
+
     <div id="stokUpdateSection" style="margin-bottom: 30px;">
       <h2>Update Stok Peralatan</h2>
       <div class="form-group">
         <label>Kode PIN</label>
-        <input type="password" id="pinInput" placeholder="Masukkan 6 digit PIN" />
+        <input type="password" id="pinInput" placeholder="Masukkan 6 digit PIN">
       </div>
       <button onclick="cekPIN()" class="btn">Masuk</button>
       <div id="stokForm" style="display:none; margin-top:20px;"></div>
     </div>
 
-    <!-- Form Reservasi -->
     <form id="reservationForm">
-      <div class="form-group"><label>Nama Reservasi</label><input type="text" id="nama" required /></div>
-      <div class="form-group"><label>Jam Reservasi</label><input type="time" id="jam" required /></div>
-      <div class="form-group"><label>Jumlah Peserta</label><input type="number" id="peserta" min="1" required /></div>
-      <div class="form-group"><label>Jumlah Variasi Lauk</label><input type="number" id="jumlahLauk" min="0" required /></div>
+      <div class="form-group">
+        <label>Nama Reservasi</label>
+        <input type="text" id="nama" required>
+      </div>
+      <div class="form-group">
+        <label>Jam Reservasi</label>
+        <input type="time" id="jam" required>
+      </div>
+      <div class="form-group">
+        <label>Jumlah Peserta</label>
+        <input type="number" id="peserta" min="1" required>
+      </div>
+      <div class="form-group">
+        <label>Jumlah Variasi Lauk</label>
+        <input type="number" id="jumlahLauk" min="0" required>
+      </div>
       <div class="form-group">
         <label>Menu Tambahan</label>
         <div class="checkbox-group">
-          <label><input type="checkbox" id="menuNasi" /> Nasi</label>
-          <label><input type="checkbox" id="menuSup" /> Sup</label>
-          <label><input type="checkbox" id="menuEs" /> Es Batu</label>
-          <label><input type="checkbox" id="menuTeh" /> Teh</label>
+          <label><input type="checkbox" id="menuNasi"> Nasi</label>
+          <label><input type="checkbox" id="menuSup"> Sup</label>
+          <label><input type="checkbox" id="menuEs"> Es Batu</label>
+          <label><input type="checkbox" id="menuTeh"> Teh</label>
         </div>
       </div>
       <div class="form-group">
         <label>Tempat yang Dipilih</label>
         <select id="tempat" required>
           <option value="">-- Pilih Tempat --</option>
-          <option>Lantai 1 depan</option>
-          <option>Lantai 1 tengah</option>
-          <option>Lantai 1 belakang</option>
-          <option>Meeting room</option>
-          <option>Lantai 2</option>
-          <option>Lantai 3 barat</option>
-          <option>Lantai 3 timur</option>
-          <option>Gubug 1</option>
-          <option>Gubug 2</option>
-          <option>Gubug 3</option>
+          <option value="Lantai 1 depan">Lantai 1 depan</option>
+          <option value="Lantai 1 tengah">Lantai 1 tengah</option>
+          <option value="Lantai 1 belakang">Lantai 1 belakang</option>
+          <option value="Meeting room">Meeting room</option>
+          <option value="Lantai 2">Lantai 2</option>
+          <option value="Lantai 3 barat">Lantai 3 barat</option>
+          <option value="Lantai 3 timur">Lantai 3 timur</option>
+          <option value="Gubug 1">Gubug 1</option>
+          <option value="Gubug 2">Gubug 2</option>
+          <option value="Gubug 3">Gubug 3</option>
         </select>
       </div>
-      <div class="form-group"><label>Request Tambahan</label><textarea id="request" rows="3"></textarea></div>
+      <div class="form-group">
+        <label>Request Tambahan</label>
+        <textarea id="request" rows="3"></textarea>
+      </div>
       <button type="submit" class="btn">Tambah Reservasi</button>
     </form>
 
@@ -65,32 +148,31 @@
     const reservations = [];
 
     const stokAwal = {
-  lauk: [
-    { nama: "Roll top kotak kecil", kapasitas: 20, stok: 5 },
-    { nama: "Roll top sedang", kapasitas: 45, stok: 2 },
-    { nama: "Roll top bulat", kapasitas: 30, stok: 3 },
-    { nama: "Roll top panjang", kapasitas: 80, stok: 2 }
-  ],
-  nasi: [
-    { nama: "Magicom kecil", kapasitas: 20, stok: 1 },
-    { nama: "Magicom besar", kapasitas: 80, stok: 3 }
-  ],
-  sup: [
-    { nama: "Pemanas sup sedang", kapasitas: 50, stok: 2 },
-    { nama: "Pemanas sup besar", kapasitas: 80, stok: 1 }
-  ],
-  es: [
-    { nama: "Tempat es kecil", kapasitas: 20, stok: 2 },
-    { nama: "Tempat es sedang", kapasitas: 40, stok: 1 },
-    { nama: "Tempat es besar", kapasitas: 100, stok: 5 }
-  ],
-  teh: [
-    { nama: "Dispenser teh kecil", kapasitas: 32, stok: 5 },
-    { nama: "Dispenser teh sedang", kapasitas: 55, stok: 1 },
-    { nama: "Dispenser teh dobel", kapasitas: 100, stok: 1 },
-    { nama: "Dispenser teh besar", kapasitas: 166, stok: 1 }
-  ]
-};
+      lauk: [
+        { nama: "Roll top kotak kecil", kapasitas: 20, stok: 5 },
+        { nama: "Roll top bulat", kapasitas: 30, stok: 3 },
+        { nama: "Roll top sedang", kapasitas: 45, stok: 2 },
+        { nama: "Roll top panjang", kapasitas: 80, stok: 2 }
+      ],
+      nasi: [
+        { nama: "Magicom kecil", kapasitas: 20, stok: 1 },
+        { nama: "Magicom sedang", kapasitas: 50, stok: 2 },
+        { nama: "Magicom besar", kapasitas: 80, stok: 1 }
+      ],
+      sup: [
+        { nama: "Pemanas sup sedang", kapasitas: 50, stok: 2 },
+        { nama: "Pemanas sup besar", kapasitas: 80, stok: 1 }
+      ],
+      es: [
+        { nama: "Tempat es kecil", kapasitas: 20, stok: 2 },
+        { nama: "Tempat es sedang", kapasitas: 40, stok: 1 },
+        { nama: "Tempat es besar", kapasitas: 100, stok: 1 }
+      ],
+      teh: [
+        { nama: "Dispenser teh kecil", kapasitas: 32, stok: 4 },
+        { nama: "Dispenser teh besar", kapasitas: 166, stok: 1 }
+      ]
+    };
 
     const durasiReservasiMs = 3.5 * 60 * 60 * 1000;
 
@@ -256,7 +338,7 @@
           <p><strong>Variasi Lauk:</strong> ${r.jumlahLauk}</p>
           <p><strong>Request:</strong> ${r.request}</p>
           <p><strong>Alokasi Peralatan:</strong></p>
-          <ul>${r.alokasi.map(a => `<li>${a}</li>`).join("")}</ul>
+          <ul>${r.alokasi.map(a => `<li>${a}</li>`).join('')}</ul>
         `;
         list.appendChild(div);
       });
