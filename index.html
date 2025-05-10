@@ -18,6 +18,7 @@
       --dark: #212529;
       --gray: #6c757d;
       --light-gray: #e9ecef;
+      --dark-blue: #1a237e;
     }
     
     * {
@@ -50,7 +51,7 @@
       margin-bottom: 30px;
     }
     
-    h1, h2, h3 {
+    h1, h2, h3, h4 {
       color: var(--primary);
       margin-bottom: 20px;
       font-weight: 600;
@@ -84,6 +85,11 @@
     h3 {
       font-size: 1.4rem;
       color: var(--secondary);
+    }
+    
+    h4 {
+      font-size: 1.2rem;
+      color: var(--dark);
     }
     
     .form-group {
@@ -274,7 +280,7 @@
     }
     
     .pin-section {
-      background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--dark-blue) 100%);
       padding: 30px;
       border-radius: 10px;
       color: white;
@@ -322,11 +328,12 @@
     }
     
     .stok-form {
-      background: var(--light);
+      background: white;
       padding: 25px;
       border-radius: 10px;
       margin-top: 20px;
       border: 1px solid var(--light-gray);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
     
     .stok-form h3 {
@@ -334,7 +341,9 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 15px;
-      color: var(--secondary);
+      color: var(--dark);
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--light-gray);
     }
     
     .stok-form h3 i {
@@ -343,31 +352,58 @@
     
     .stok-item {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 20px;
       align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--light-gray);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      background-color: var(--light);
     }
     
     .stok-item:last-child {
-      border-bottom: none;
+      margin-bottom: 0;
     }
     
     .stok-item label {
       margin-bottom: 0;
-      font-weight: 400;
+      font-weight: 500;
+      color: var(--dark);
+    }
+    
+    .stok-item .stok-info {
+      font-size: 0.9rem;
+      color: var(--gray);
     }
     
     .stok-item input {
-      max-width: 100px;
+      width: 100%;
+      padding: 10px;
       text-align: center;
+      border: 2px solid var(--light-gray);
+      border-radius: 6px;
+      background: white;
+    }
+    
+    .stok-item input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
     }
     
     .stok-actions {
       display: flex;
       justify-content: flex-end;
       margin-top: 20px;
+      gap: 15px;
+    }
+    
+    .btn-secondary {
+      background: var(--gray);
+    }
+    
+    .btn-secondary:hover {
+      background: #5a6268;
     }
     
     .empty-state {
@@ -384,6 +420,44 @@
     
     .empty-state p {
       font-size: 1.1rem;
+    }
+    
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    .notification.success {
+      background: #4BB543;
+    }
+    
+    .notification.error {
+      background: #ff3333;
+    }
+    
+    .notification i {
+      font-size: 1.2rem;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
     
     @media (max-width: 768px) {
@@ -423,21 +497,33 @@
       
       .stok-item {
         grid-template-columns: 1fr;
+        gap: 10px;
       }
       
       .stok-item input {
         max-width: 100%;
       }
+      
+      .stok-actions {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
     }
     
     @media (max-width: 480px) {
       .btn {
-        width: 100%;
         padding: 15px;
       }
       
       .pin-section {
         padding: 20px;
+      }
+      
+      .stok-form {
+        padding: 15px;
       }
     }
   </style>
@@ -585,32 +671,7 @@
       }
       localStorage.setItem("stokData", JSON.stringify(stokGlobal));
       
-      // Tampilkan notifikasi sukses
-      const notification = document.createElement('div');
-      notification.style.position = 'fixed';
-      notification.style.bottom = '20px';
-      notification.style.right = '20px';
-      notification.style.backgroundColor = '#4BB543';
-      notification.style.color = 'white';
-      notification.style.padding = '15px 25px';
-      notification.style.borderRadius = '8px';
-      notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-      notification.style.zIndex = '1000';
-      notification.style.display = 'flex';
-      notification.style.alignItems = 'center';
-      notification.style.gap = '10px';
-      notification.innerHTML = `
-        <i class="fas fa-check-circle" style="font-size: 1.2rem;"></i>
-        <span>Stok berhasil diperbarui!</span>
-      `;
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.style.transition = 'opacity 0.5s ease';
-        notification.style.opacity = '0';
-        setTimeout(() => notification.remove(), 500);
-      }, 3000);
-      
+      showNotification('success', 'Stok berhasil diperbarui!');
       document.getElementById("stokForm").style.display = "none";
     }
 
@@ -619,31 +680,7 @@
       if (pin === "437666") {
         tampilkanFormStok();
       } else {
-        // Tampilkan notifikasi error
-        const notification = document.createElement('div');
-        notification.style.position = 'fixed';
-        notification.style.bottom = '20px';
-        notification.style.right = '20px';
-        notification.style.backgroundColor = '#ff3333';
-        notification.style.color = 'white';
-        notification.style.padding = '15px 25px';
-        notification.style.borderRadius = '8px';
-        notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-        notification.style.zIndex = '1000';
-        notification.style.display = 'flex';
-        notification.style.alignItems = 'center';
-        notification.style.gap = '10px';
-        notification.innerHTML = `
-          <i class="fas fa-exclamation-circle" style="font-size: 1.2rem;"></i>
-          <span>PIN salah!</span>
-        `;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-          notification.style.transition = 'opacity 0.5s ease';
-          notification.style.opacity = '0';
-          setTimeout(() => notification.remove(), 500);
-        }, 3000);
+        showNotification('error', 'PIN salah!');
       }
     }
 
@@ -660,7 +697,10 @@
           const div = document.createElement("div");
           div.className = "stok-item";
           div.innerHTML = `
-            <label>${item.nama} <small>(Kapasitas: ${item.kapasitas})</small></label>
+            <div>
+              <label>${item.nama}</label>
+              <div class="stok-info">Kapasitas: ${item.kapasitas}</div>
+            </div>
             <input type="number" class="input-stok" data-key="${kategori}-${index}" value="${item.stok}" min="0">
           `;
           container.appendChild(div);
@@ -670,12 +710,20 @@
       const stokActions = document.createElement("div");
       stokActions.className = "stok-actions";
       
+      const cancelBtn = document.createElement("button");
+      cancelBtn.className = "btn btn-secondary";
+      cancelBtn.innerHTML = `<i class="fas fa-times"></i> Batal`;
+      cancelBtn.onclick = () => {
+        document.getElementById("stokForm").style.display = "none";
+      };
+      
       const simpanBtn = document.createElement("button");
       simpanBtn.className = "btn";
       simpanBtn.innerHTML = `<i class="fas fa-save"></i> Simpan Stok`;
       simpanBtn.onclick = simpanStokBaru;
-      stokActions.appendChild(simpanBtn);
       
+      stokActions.appendChild(cancelBtn);
+      stokActions.appendChild(simpanBtn);
       container.appendChild(stokActions);
       container.style.display = "block";
     }
@@ -694,7 +742,7 @@
     document.getElementById("reservationForm").addEventListener("submit", function (e) {
       e.preventDefault();
       if (reservations.length >= 10) {
-        showAlert('error', 'Maksimal 10 reservasi per hari.');
+        showNotification('error', 'Maksimal 10 reservasi per hari.');
         return;
       }
 
@@ -733,8 +781,7 @@
       tampilkanReservasi();
       this.reset();
       
-      // Tampilkan notifikasi sukses
-      showAlert('success', 'Reservasi berhasil ditambahkan!');
+      showNotification('success', 'Reservasi berhasil ditambahkan!');
     });
 
     function hitungAlokasi(peserta, jumlahLauk, menu, stok) {
@@ -810,22 +857,11 @@
       });
     }
     
-    function showAlert(type, message) {
+    function showNotification(type, message) {
       const notification = document.createElement('div');
-      notification.style.position = 'fixed';
-      notification.style.bottom = '20px';
-      notification.style.right = '20px';
-      notification.style.backgroundColor = type === 'success' ? '#4BB543' : '#ff3333';
-      notification.style.color = 'white';
-      notification.style.padding = '15px 25px';
-      notification.style.borderRadius = '8px';
-      notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-      notification.style.zIndex = '1000';
-      notification.style.display = 'flex';
-      notification.style.alignItems = 'center';
-      notification.style.gap = '10px';
+      notification.className = `notification ${type}`;
       notification.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}" style="font-size: 1.2rem;"></i>
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
         <span>${message}</span>
       `;
       document.body.appendChild(notification);
