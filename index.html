@@ -1,211 +1,348 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistem Reservasi Dolan Sawah</title>
+  <meta charset="UTF-8">
+  <title>Alokasi Peralatan Reservasi</title>
   <style>
     body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f0f5;
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      text-align: center;
       color: #333;
     }
-    header {
-      background-color: #8bc34a;
-      padding: 1rem;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      color: white;
-    }
-    header small {
-      color: white;
-      font-size: 0.8rem;
-    }
-    nav {
-      display: flex;
-      justify-content: center;
-      background-color: #cddc39;
-      flex-wrap: wrap;
-    }
-    nav button {
-      background: none;
-      border: none;
-      padding: 1rem;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    nav button.active {
-      background-color: #afb42b;
-      color: white;
-    }
-    .tab-content {
-      display: none;
-      padding: 1rem;
-    }
-    .tab-content.active {
-      display: block;
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     .form-group {
-      margin-bottom: 1rem;
+      margin-bottom: 15px;
     }
-    .form-group label {
+    label {
       display: block;
+      margin-bottom: 6px;
       font-weight: bold;
     }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
+    input[type="text"], input[type="time"], input[type="number"], input[type="password"], textarea, select {
       width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      box-sizing: border-box;
-    }
-    .reservation-item {
-      margin-bottom: 1rem;
-      background-color: white;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .reservation-item h3 {
-      margin-top: 0;
-      font-weight: bold;
-    }
-    .label {
-      display: inline-block;
-      padding: 0.25rem 0.5rem;
+      padding: 8px;
       border-radius: 4px;
-      font-size: 0.8rem;
-      margin-right: 0.25rem;
+      border: 1px solid #ccc;
     }
-    .label.ds {
-      background-color: #4caf50;
+    textarea {
+      resize: vertical;
+    }
+    .checkbox-group label {
+      display: inline-block;
+      margin-right: 15px;
+      font-weight: normal;
+    }
+    .btn {
+      background: #28a745;
       color: white;
-    }
-    .label.sw {
-      background-color: #f44336;
-      color: white;
-    }
-    .label.refill {
-      background-color: #ffeb3b;
-      color: black;
-    }
-    .share-input {
-      margin-top: 1rem;
-    }
-    .share-input input {
-      width: calc(100% - 100px);
-      margin-right: 0.5rem;
-    }
-    .share-input button {
-      width: 90px;
-      background-color: #4caf50;
-      color: white;
+      padding: 10px 15px;
       border: none;
-      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
     }
-    @media (max-width: 600px) {
-      nav button {
-        flex: 1 1 100%;
-        text-align: center;
-      }
+    .btn:hover {
+      background: #218838;
+    }
+    .reservation-card {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 7px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #fff;
+      margin-left: 5px;
+    }
+    .ds {
+      background: #28a745;
+    }
+    .sw {
+      background: #dc3545;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Sistem Reservasi Dolan Sawah</h1>
-    <small>by Ryan</small>
-  </header>
-  <nav>
-    <button class="tablink active" onclick="openTab(event, 'reservasi')">Reservasi</button>
-    <button class="tablink" onclick="openTab(event, 'rangkuman')">Rangkuman</button>
-    <button class="tablink" onclick="openTab(event, 'stok')">Stok Perlengkapan</button>
-    <button class="tablink" onclick="openTab(event, 'info')">Info Tempat</button>
-  </nav>
-  <div id="reservasi" class="tab-content active">
-    <h2>Form Reservasi</h2>
+  <div class="container">
+    <h1>Alokasi Peralatan Reservasi</h1>
+
+    <div id="stokUpdateSection" style="margin-bottom: 30px;">
+      <h2>Update Stok Peralatan</h2>
+      <div class="form-group">
+        <label>Kode PIN</label>
+        <input type="password" id="pinInput" placeholder="Masukkan 6 digit PIN">
+      </div>
+      <button onclick="cekPIN()" class="btn">Masuk</button>
+      <div id="stokForm" style="display:none; margin-top:20px;"></div>
+    </div>
+
     <form id="reservationForm">
       <div class="form-group">
         <label>Nama Reservasi</label>
-        <input type="text" name="nama" required />
-      </div>
-      <div class="form-group">
-        <label>Jumlah Peserta</label>
-        <input type="number" name="peserta" required />
+        <input type="text" id="nama" required>
       </div>
       <div class="form-group">
         <label>Jam Reservasi</label>
-        <input type="time" name="jam" required />
+        <input type="time" id="jam" required>
       </div>
       <div class="form-group">
-        <label>Pilihan Tempat</label>
-        <select name="tempat">
-          <option value="Lantai 1">Lantai 1</option>
+        <label>Jumlah Peserta</label>
+        <input type="number" id="peserta" min="1" required>
+      </div>
+      <div class="form-group">
+        <label>Jumlah Variasi Lauk</label>
+        <input type="number" id="jumlahLauk" min="0" required>
+      </div>
+      <div class="form-group">
+        <label>Menu Tambahan</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="menuNasi"> Nasi</label>
+          <label><input type="checkbox" id="menuSup"> Sup</label>
+          <label><input type="checkbox" id="menuEs"> Es Batu</label>
+          <label><input type="checkbox" id="menuTeh"> Teh</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tempat yang Dipilih</label>
+        <select id="tempat" required>
+          <option value="">-- Pilih Tempat --</option>
+          <option value="Lantai 1 depan">Lantai 1 depan</option>
+          <option value="Lantai 1 tengah">Lantai 1 tengah</option>
+          <option value="Lantai 1 belakang">Lantai 1 belakang</option>
+          <option value="Meeting room">Meeting room</option>
           <option value="Lantai 2">Lantai 2</option>
-          <option value="Lantai 3">Lantai 3</option>
+          <option value="Lantai 3 barat">Lantai 3 barat</option>
+          <option value="Lantai 3 timur">Lantai 3 timur</option>
           <option value="Gubug 1">Gubug 1</option>
           <option value="Gubug 2">Gubug 2</option>
           <option value="Gubug 3">Gubug 3</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Pilihan Menu</label>
-        <select name="menu">
-          <option value="A">Paket A</option>
-          <option value="B">Paket B</option>
-          <option value="C">Paket C</option>
-          <option value="D">Paket D</option>
-          <option value="E">Paket E</option>
-          <option value="F">Paket F</option>
-          <option value="G">Paket G</option>
-          <option value="H">Paket H</option>
-          <option value="I">Paket I</option>
-          <option value="J">Paket J</option>
-        </select>
-      </div>
-      <div class="form-group">
         <label>Request Tambahan</label>
-        <textarea name="tambahan" rows="3"></textarea>
+        <textarea id="request" rows="3"></textarea>
       </div>
-      <button type="submit">Tambah Reservasi</button>
+      <button type="submit" class="btn">Tambah Reservasi</button>
     </form>
-    <div id="reservationList"></div>
+
+    <div id="reservationsList"></div>
   </div>
-  <div id="rangkuman" class="tab-content">
-    <h2>Rangkuman Reservasi</h2>
-    <div id="summaryList"></div>
-    <div class="share-input">
-      <input type="text" id="waNumber" placeholder="Masukkan nomor WhatsApp" />
-      <button onclick="shareToWA()">Share</button>
-    </div>
-  </div>
-  <div id="stok" class="tab-content">
-    <h2>Stok Perlengkapan</h2>
-    <div id="stokList">[Akan ditampilkan dinamis berdasarkan data]</div>
-  </div>
-  <div id="info" class="tab-content">
-    <h2>Info Tempat</h2>
-    <div id="infoTempat">[Akan ditampilkan dinamis berdasarkan data]</div>
-  </div>
+
   <script>
-    function openTab(evt, tabName) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tablink').forEach(btn => btn.classList.remove('active'));
-      document.getElementById(tabName).classList.add('active');
-      evt.currentTarget.classList.add('active');
+    const reservations = [];
+
+    const stokAwal = {
+      lauk: [
+        { nama: "Roll top kotak kecil", kapasitas: 20, stok: 5 },
+        { nama: "Roll top bulat", kapasitas: 30, stok: 3 },
+        { nama: "Roll top sedang", kapasitas: 45, stok: 2 },
+        { nama: "Roll top panjang", kapasitas: 80, stok: 2 }
+      ],
+      nasi: [
+        { nama: "Magicom kecil", kapasitas: 20, stok: 1 },
+        { nama: "Magicom sedang", kapasitas: 50, stok: 2 },
+        { nama: "Magicom besar", kapasitas: 80, stok: 1 }
+      ],
+      sup: [
+        { nama: "Pemanas sup sedang", kapasitas: 50, stok: 2 },
+        { nama: "Pemanas sup besar", kapasitas: 80, stok: 1 }
+      ],
+      es: [
+        { nama: "Tempat es kecil", kapasitas: 20, stok: 2 },
+        { nama: "Tempat es sedang", kapasitas: 40, stok: 1 },
+        { nama: "Tempat es besar", kapasitas: 100, stok: 1 }
+      ],
+      teh: [
+        { nama: "Dispenser teh kecil", kapasitas: 32, stok: 4 },
+        { nama: "Dispenser teh besar", kapasitas: 166, stok: 1 }
+      ]
+    };
+
+    const durasiReservasiMs = 3.5 * 60 * 60 * 1000;
+
+    function parseTimeToMs(timeStr) {
+      const [hours, minutes] = timeStr.split(":").map(Number);
+      return (hours * 60 + minutes) * 60 * 1000;
     }
-    function shareToWA() {
-      const number = document.getElementById('waNumber').value;
-      const summary = document.getElementById('summaryList').innerText;
-      const waUrl = `https://wa.me/${number}?text=${encodeURIComponent(summary)}`;
-      window.open(waUrl, '_blank');
+
+    function deepCopy(obj) {
+      return JSON.parse(JSON.stringify(obj));
     }
-    // NOTE: Belum termasuk logika lengkap seperti pengurangan stok, pemilihan alat otomatis, dll. Akan ditambahkan di bagian JavaScript lanjutan sesuai permintaan.
+
+    function loadStokFromStorage() {
+      const data = localStorage.getItem("stokData");
+      return data ? JSON.parse(data) : deepCopy(stokAwal);
+    }
+
+    let stokGlobal = loadStokFromStorage();
+
+    function simpanStokBaru() {
+      const inputs = document.querySelectorAll(".input-stok");
+      for (let input of inputs) {
+        const [kategori, index] = input.dataset.key.split("-");
+        stokGlobal[kategori][index].stok = parseInt(input.value);
+      }
+      localStorage.setItem("stokData", JSON.stringify(stokGlobal));
+      alert("Stok berhasil diperbarui!");
+      document.getElementById("stokForm").style.display = "none";
+    }
+
+    function cekPIN() {
+      const pin = document.getElementById("pinInput").value;
+      if (pin === "437666") {
+        tampilkanFormStok();
+      } else {
+        alert("PIN salah!");
+      }
+    }
+
+    function tampilkanFormStok() {
+      const container = document.getElementById("stokForm");
+      container.innerHTML = "";
+      for (let kategori in stokGlobal) {
+        const judul = document.createElement("h3");
+        judul.textContent = kategori.toUpperCase();
+        container.appendChild(judul);
+
+        stokGlobal[kategori].forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "form-group";
+          div.innerHTML = `
+            <label>${item.nama} (Kapasitas: ${item.kapasitas})</label>
+            <input type="number" class="input-stok" data-key="${kategori}-${index}" value="${item.stok}" min="0">
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      const simpanBtn = document.createElement("button");
+      simpanBtn.className = "btn";
+      simpanBtn.textContent = "Simpan Stok";
+      simpanBtn.onclick = simpanStokBaru;
+      container.appendChild(simpanBtn);
+
+      container.style.display = "block";
+    }
+
+    document.getElementById("reservationForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (reservations.length >= 10) {
+        alert("Maksimal 10 reservasi per hari.");
+        return;
+      }
+
+      const nama = document.getElementById("nama").value;
+      const jam = document.getElementById("jam").value;
+      const peserta = parseInt(document.getElementById("peserta").value);
+      const jumlahLauk = parseInt(document.getElementById("jumlahLauk").value);
+      const request = document.getElementById("request").value;
+      const tempat = document.getElementById("tempat").value;
+      const menu = {
+        nasi: document.getElementById("menuNasi").checked,
+        sup: document.getElementById("menuSup").checked,
+        es: document.getElementById("menuEs").checked,
+        teh: document.getElementById("menuTeh").checked
+      };
+
+      const jamMs = parseTimeToMs(jam);
+      const stokAktif = deepCopy(stokGlobal);
+
+      for (let r of reservations) {
+        const rJamMs = parseTimeToMs(r.jam);
+        const jarak = Math.abs(jamMs - rJamMs);
+        if (jarak < durasiReservasiMs) {
+          for (let kategori in stokAktif) {
+            for (let alat of stokAktif[kategori]) {
+              const digunakan = r.alokasi.filter(a => a.includes(alat.nama)).length;
+              alat.stok -= digunakan;
+            }
+          }
+        }
+      }
+
+      const alokasi = hitungAlokasi(peserta, jumlahLauk, menu, stokAktif);
+      const reservasi = { nama, jam, peserta, jumlahLauk, request, menu, tempat, alokasi };
+      reservations.push(reservasi);
+      tampilkanReservasi();
+      this.reset();
+    });
+
+    function hitungAlokasi(peserta, jumlahLauk, menu, stok) {
+      const alokasi = [];
+      let sisaLauk = jumlahLauk;
+
+      for (let alat of stok.lauk) {
+        while (sisaLauk > 0 && peserta <= alat.kapasitas && alat.stok > 0) {
+          alokasi.push(`${alat.nama} <span class="badge ds">DS</span>`);
+          alat.stok--;
+          sisaLauk--;
+        }
+      }
+
+      for (let alat of stok.lauk) {
+        while (sisaLauk > 0 && peserta <= alat.kapasitas) {
+          alokasi.push(`${alat.nama} <span class="badge sw">SW</span>`);
+          sisaLauk--;
+        }
+      }
+
+      if (menu.nasi) alokasi.push(cekAlat(peserta, stok.nasi, "magicom"));
+      if (menu.sup) alokasi.push(cekAlat(peserta, stok.sup, "pemanas sup"));
+      if (menu.es) alokasi.push(cekAlat(peserta, stok.es, "tempat es"));
+      if (menu.teh) alokasi.push(cekAlat(peserta, stok.teh, "dispenser teh"));
+
+      return alokasi;
+    }
+
+    function cekAlat(peserta, daftar, namaAlat) {
+      for (let alat of daftar) {
+        if (peserta <= alat.kapasitas && alat.stok > 0) {
+          alat.stok--;
+          return `${alat.nama} <span class="badge ds">DS</span>`;
+        }
+      }
+      for (let alat of daftar) {
+        if (peserta <= alat.kapasitas) {
+          return `${alat.nama} <span class="badge sw">SW</span>`;
+        }
+      }
+      return `Tambahan ${namaAlat} <span class="badge sw">SW</span>`;
+    }
+
+    function tampilkanReservasi() {
+      const list = document.getElementById("reservationsList");
+      list.innerHTML = "";
+      reservations.forEach((r, i) => {
+        const div = document.createElement("div");
+        div.className = "reservation-card";
+        div.innerHTML = `
+          <h3>${i + 1}. ${r.nama} - Jam: ${r.jam}</h3>
+          <p><strong>Tempat:</strong> ${r.tempat}</p>
+          <p><strong>Peserta:</strong> ${r.peserta}</p>
+          <p><strong>Variasi Lauk:</strong> ${r.jumlahLauk}</p>
+          <p><strong>Request:</strong> ${r.request}</p>
+          <p><strong>Alokasi Peralatan:</strong></p>
+          <ul>${r.alokasi.map(a => `<li>${a}</li>`).join('')}</ul>
+        `;
+        list.appendChild(div);
+      });
+    }
   </script>
 </body>
 </html>
