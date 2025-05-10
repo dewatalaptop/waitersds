@@ -2,84 +2,210 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sistem Reservasi Dolan Sawah</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background-color: #8bc34a;
+      padding: 1rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: white;
+    }
+    header small {
+      color: white;
+      font-size: 0.8rem;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #cddc39;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: none;
+      border: none;
+      padding: 1rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    nav button.active {
+      background-color: #afb42b;
+      color: white;
+    }
+    .tab-content {
+      display: none;
+      padding: 1rem;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: bold;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      box-sizing: border-box;
+    }
+    .reservation-item {
+      margin-bottom: 1rem;
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .reservation-item h3 {
+      margin-top: 0;
+      font-weight: bold;
+    }
+    .label {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      margin-right: 0.25rem;
+    }
+    .label.ds {
+      background-color: #4caf50;
+      color: white;
+    }
+    .label.sw {
+      background-color: #f44336;
+      color: white;
+    }
+    .label.refill {
+      background-color: #ffeb3b;
+      color: black;
+    }
+    .share-input {
+      margin-top: 1rem;
+    }
+    .share-input input {
+      width: calc(100% - 100px);
+      margin-right: 0.5rem;
+    }
+    .share-input button {
+      width: 90px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+    }
+    @media (max-width: 600px) {
+      nav button {
+        flex: 1 1 100%;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h1>Dolan Sawah - Sistem Reservasi</h1>
-    <small>Alokasi tempat & perlengkapan otomatis</small>
+    <h1>Sistem Reservasi Dolan Sawah</h1>
+    <small>by Ryan</small>
   </header>
-
   <nav>
-    <button onclick="switchTab('reservasi')" class="active">Reservasi</button>
-    <button onclick="switchTab('rangkuman')">Rangkuman</button>
-    <button onclick="switchTab('stok')">Stok Perlengkapan</button>
-    <button onclick="switchTab('info')">Info Tempat</button>
+    <button class="tablink active" onclick="openTab(event, 'reservasi')">Reservasi</button>
+    <button class="tablink" onclick="openTab(event, 'rangkuman')">Rangkuman</button>
+    <button class="tablink" onclick="openTab(event, 'stok')">Stok Perlengkapan</button>
+    <button class="tablink" onclick="openTab(event, 'info')">Info Tempat</button>
   </nav>
-
-  <!-- Tab: Reservasi -->
-  <section id="reservasi" class="tab active">
-    <form id="form-reservasi"></form>
-    <button type="button" onclick="tambahReservasi()">+ Tambah Reservasi</button>
-    <button type="button" onclick="prosesReservasi()">Proses</button>
-  </section>
-
-  <!-- Tab: Rangkuman -->
-  <section id="rangkuman" class="tab">
-    <div id="hasil-rangkuman"></div>
-  </section>
-
-  <!-- Tab: Stok Perlengkapan -->
-  <section id="stok" class="tab">
-    <form id="form-stok">
+  <div id="reservasi" class="tab-content active">
+    <h2>Form Reservasi</h2>
+    <form id="reservationForm">
       <div class="form-group">
-        <label for="stok-rolltop-besar">Roll Top Besar (DS):</label>
-        <input type="number" id="stok-rolltop-besar" value="5" />
+        <label>Nama Reservasi</label>
+        <input type="text" name="nama" required />
       </div>
       <div class="form-group">
-        <label for="stok-rolltop-sedang">Roll Top Sedang (DS):</label>
-        <input type="number" id="stok-rolltop-sedang" value="3" />
+        <label>Jumlah Peserta</label>
+        <input type="number" name="peserta" required />
       </div>
       <div class="form-group">
-        <label for="stok-magiccom">Magicom (DS):</label>
-        <input type="number" id="stok-magiccom" value="3" />
+        <label>Jam Reservasi</label>
+        <input type="time" name="jam" required />
       </div>
       <div class="form-group">
-        <label for="stok-dispenser">Dispenser Teh (DS):</label>
-        <input type="number" id="stok-dispenser" value="2" />
+        <label>Pilihan Tempat</label>
+        <select name="tempat">
+          <option value="Lantai 1">Lantai 1</option>
+          <option value="Lantai 2">Lantai 2</option>
+          <option value="Lantai 3">Lantai 3</option>
+          <option value="Gubug 1">Gubug 1</option>
+          <option value="Gubug 2">Gubug 2</option>
+          <option value="Gubug 3">Gubug 3</option>
+        </select>
       </div>
       <div class="form-group">
-        <label for="stok-sup">Pemanas Sup (DS):</label>
-        <input type="number" id="stok-sup" value="2" />
+        <label>Pilihan Menu</label>
+        <select name="menu">
+          <option value="A">Paket A</option>
+          <option value="B">Paket B</option>
+          <option value="C">Paket C</option>
+          <option value="D">Paket D</option>
+          <option value="E">Paket E</option>
+          <option value="F">Paket F</option>
+          <option value="G">Paket G</option>
+          <option value="H">Paket H</option>
+          <option value="I">Paket I</option>
+          <option value="J">Paket J</option>
+        </select>
       </div>
       <div class="form-group">
-        <label for="stok-es">Tempat Es (DS):</label>
-        <input type="number" id="stok-es" value="2" />
+        <label>Request Tambahan</label>
+        <textarea name="tambahan" rows="3"></textarea>
       </div>
+      <button type="submit">Tambah Reservasi</button>
     </form>
-    <p><i>Masukkan PIN untuk menyimpan stok:</i></p>
-    <input type="password" id="pin" placeholder="PIN Admin" />
-    <button onclick="simpanStok()">Simpan Stok</button>
-  </section>
-
-  <!-- Tab: Info Tempat -->
-  <section id="info" class="tab">
-    <h3>Daftar Tempat</h3>
-    <ul>
-      <li>Pondok 1 – Kapasitas 6</li>
-      <li>Pondok 2 – Kapasitas 6</li>
-      <li>Pondok 3 – Kapasitas 6</li>
-      <li>Tenda A – Kapasitas 4</li>
-      <li>Tenda B – Kapasitas 4</li>
-      <li>Tenda C – Kapasitas 2</li>
-    </ul>
-    <p>Tempat akan dialokasikan otomatis sesuai kapasitas.</p>
-  </section>
-
-  <script src="utils.js"></script>
-  <script src="alokasi.js"></script>
-  <script src="script.js"></script>
+    <div id="reservationList"></div>
+  </div>
+  <div id="rangkuman" class="tab-content">
+    <h2>Rangkuman Reservasi</h2>
+    <div id="summaryList"></div>
+    <div class="share-input">
+      <input type="text" id="waNumber" placeholder="Masukkan nomor WhatsApp" />
+      <button onclick="shareToWA()">Share</button>
+    </div>
+  </div>
+  <div id="stok" class="tab-content">
+    <h2>Stok Perlengkapan</h2>
+    <div id="stokList">[Akan ditampilkan dinamis berdasarkan data]</div>
+  </div>
+  <div id="info" class="tab-content">
+    <h2>Info Tempat</h2>
+    <div id="infoTempat">[Akan ditampilkan dinamis berdasarkan data]</div>
+  </div>
+  <script>
+    function openTab(evt, tabName) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tablink').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+    function shareToWA() {
+      const number = document.getElementById('waNumber').value;
+      const summary = document.getElementById('summaryList').innerText;
+      const waUrl = `https://wa.me/${number}?text=${encodeURIComponent(summary)}`;
+      window.open(waUrl, '_blank');
+    }
+    // NOTE: Belum termasuk logika lengkap seperti pengurangan stok, pemilihan alat otomatis, dll. Akan ditambahkan di bagian JavaScript lanjutan sesuai permintaan.
+  </script>
 </body>
 </html>
