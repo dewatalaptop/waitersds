@@ -2,146 +2,531 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alokasi Peralatan Reservasi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f0f5;
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #3f37c9;
+      --success: #4cc9f0;
+      --danger: #f72585;
+      --warning: #f8961e;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+    }
+    
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
-    h1, h2, h3 {
-      text-align: center;
-      color: #333;
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
     }
+    
     .container {
-      max-width: 900px;
-      margin: auto;
-      background: #fff;
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
+    
+    .main-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    
+    h1, h2, h3 {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    
+    h1 {
+      font-size: 2.2rem;
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: var(--success);
+      border-radius: 2px;
+    }
+    
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 30px;
+    }
+    
+    h3 {
+      font-size: 1.4rem;
+      color: var(--secondary);
+    }
+    
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
+    
     label {
       display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--dark);
     }
-    input[type="text"], input[type="time"], input[type="number"], input[type="password"], textarea, select {
+    
+    input[type="text"],
+    input[type="time"],
+    input[type="number"],
+    input[type="password"],
+    textarea,
+    select {
       width: 100%;
-      padding: 8px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+      padding: 12px 15px;
+      border: 2px solid var(--light-gray);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background-color: var(--light);
     }
+    
+    input[type="text"]:focus,
+    input[type="time"]:focus,
+    input[type="number"]:focus,
+    input[type="password"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+      background-color: white;
+    }
+    
     textarea {
       resize: vertical;
+      min-height: 100px;
     }
+    
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
     .checkbox-group label {
-      display: inline-block;
-      margin-right: 15px;
-      font-weight: normal;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 400;
+      cursor: pointer;
+      padding: 8px 12px;
+      background-color: var(--light);
+      border-radius: 8px;
+      transition: all 0.2s ease;
     }
-    .btn {
-      background: #28a745;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
+    
+    .checkbox-group label:hover {
+      background-color: #e2e6ea;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
       cursor: pointer;
     }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--primary);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
     .btn:hover {
-      background: #218838;
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
     }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .btn i {
+      font-size: 1.1rem;
+    }
+    
     .reservation-card {
-      background: #f9f9f9;
-      border: 1px solid #ddd;
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 6px;
+      background: white;
+      border: 1px solid var(--light-gray);
+      border-radius: 10px;
+      margin-top: 25px;
+      padding: 25px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
     }
-    .badge {
+    
+    .reservation-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .reservation-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+    
+    .reservation-card h3::before {
+      content: '';
       display: inline-block;
-      padding: 3px 7px;
+      width: 8px;
+      height: 30px;
+      background: var(--primary);
       border-radius: 4px;
-      font-size: 12px;
-      color: #fff;
-      margin-left: 5px;
     }
+    
+    .reservation-card p {
+      margin-bottom: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .reservation-card p strong {
+      min-width: 120px;
+      color: var(--gray);
+    }
+    
+    .reservation-card ul {
+      list-style-type: none;
+      margin-top: 15px;
+    }
+    
+    .reservation-card li {
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--light-gray);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .reservation-card li::before {
+      content: '•';
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+      margin-left: 8px;
+    }
+    
     .ds {
-      background: #28a745;
+      background: var(--success);
     }
+    
     .sw {
-      background: #dc3545;
+      background: var(--warning);
+    }
+    
+    .pin-section {
+      background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+      padding: 30px;
+      border-radius: 10px;
+      color: white;
+      margin-bottom: 30px;
+    }
+    
+    .pin-section h2 {
+      color: white;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .pin-section h2 i {
+      font-size: 1.5rem;
+    }
+    
+    .pin-section label {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .pin-section input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+    
+    .pin-section input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .pin-section input:focus {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: white;
+    }
+    
+    .pin-section .btn {
+      background: white;
+      color: var(--primary);
+    }
+    
+    .pin-section .btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .stok-form {
+      background: var(--light);
+      padding: 25px;
+      border-radius: 10px;
+      margin-top: 20px;
+      border: 1px solid var(--light-gray);
+    }
+    
+    .stok-form h3 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+      color: var(--secondary);
+    }
+    
+    .stok-form h3 i {
+      color: var(--primary);
+    }
+    
+    .stok-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    
+    .stok-item:last-child {
+      border-bottom: none;
+    }
+    
+    .stok-item label {
+      margin-bottom: 0;
+      font-weight: 400;
+    }
+    
+    .stok-item input {
+      max-width: 100px;
+      text-align: center;
+    }
+    
+    .stok-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+    
+    .empty-state i {
+      font-size: 3rem;
+      color: var(--light-gray);
+      margin-bottom: 20px;
+    }
+    
+    .empty-state p {
+      font-size: 1.1rem;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .main-card {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      h3 {
+        font-size: 1.2rem;
+      }
+      
+      .checkbox-group {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .reservation-card p {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .reservation-card p strong {
+        min-width: auto;
+      }
+      
+      .stok-item {
+        grid-template-columns: 1fr;
+      }
+      
+      .stok-item input {
+        max-width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .btn {
+        width: 100%;
+        padding: 15px;
+      }
+      
+      .pin-section {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Alokasi Peralatan Reservasi</h1>
+    <div class="main-card">
+      <h1><i class="fas fa-utensils"></i> Alokasi Peralatan Reservasi</h1>
 
-    <div id="stokUpdateSection" style="margin-bottom: 30px;">
-      <h2>Update Stok Peralatan</h2>
-      <div class="form-group">
-        <label>Kode PIN</label>
-        <input type="password" id="pinInput" placeholder="Masukkan 6 digit PIN">
-      </div>
-      <button onclick="cekPIN()" class="btn">Masuk</button>
-      <div id="stokForm" style="display:none; margin-top:20px;"></div>
-    </div>
-
-    <form id="reservationForm">
-      <div class="form-group">
-        <label>Nama Reservasi</label>
-        <input type="text" id="nama" required>
-      </div>
-      <div class="form-group">
-        <label>Jam Reservasi</label>
-        <input type="time" id="jam" required>
-      </div>
-      <div class="form-group">
-        <label>Jumlah Peserta</label>
-        <input type="number" id="peserta" min="1" required>
-      </div>
-      <div class="form-group">
-        <label>Jumlah Variasi Lauk</label>
-        <input type="number" id="jumlahLauk" min="0" required>
-      </div>
-      <div class="form-group">
-        <label>Menu Tambahan</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" id="menuNasi"> Nasi</label>
-          <label><input type="checkbox" id="menuSup"> Sup</label>
-          <label><input type="checkbox" id="menuEs"> Es Batu</label>
-          <label><input type="checkbox" id="menuTeh"> Teh</label>
+      <div id="stokUpdateSection">
+        <div class="pin-section">
+          <h2><i class="fas fa-lock"></i> Update Stok Peralatan</h2>
+          <div class="form-group">
+            <label>Kode PIN</label>
+            <input type="password" id="pinInput" placeholder="Masukkan 6 digit PIN">
+          </div>
+          <button onclick="cekPIN()" class="btn"><i class="fas fa-sign-in-alt"></i> Masuk</button>
+          <div id="stokForm" class="stok-form" style="display:none;"></div>
         </div>
       </div>
-      <div class="form-group">
-        <label>Tempat yang Dipilih</label>
-        <select id="tempat" required>
-          <option value="">-- Pilih Tempat --</option>
-          <option value="Lantai 1 depan">Lantai 1 depan</option>
-          <option value="Lantai 1 tengah">Lantai 1 tengah</option>
-          <option value="Lantai 1 belakang">Lantai 1 belakang</option>
-          <option value="Meeting room">Meeting room</option>
-          <option value="Lantai 2">Lantai 2</option>
-          <option value="Lantai 3 barat">Lantai 3 barat</option>
-          <option value="Lantai 3 timur">Lantai 3 timur</option>
-          <option value="Gubug 1">Gubug 1</option>
-          <option value="Gubug 2">Gubug 2</option>
-          <option value="Gubug 3">Gubug 3</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Request Tambahan</label>
-        <textarea id="request" rows="3"></textarea>
-      </div>
-      <button type="submit" class="btn">Tambah Reservasi</button>
-    </form>
 
-    <div id="reservationsList"></div>
+      <form id="reservationForm">
+        <h2><i class="fas fa-calendar-plus"></i> Form Reservasi</h2>
+        
+        <div class="form-group">
+          <label for="nama"><i class="fas fa-user"></i> Nama Reservasi</label>
+          <input type="text" id="nama" required placeholder="Masukkan nama reservasi">
+        </div>
+        
+        <div class="form-group">
+          <label for="jam"><i class="fas fa-clock"></i> Jam Reservasi</label>
+          <input type="time" id="jam" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="peserta"><i class="fas fa-users"></i> Jumlah Peserta</label>
+          <input type="number" id="peserta" min="1" required placeholder="Jumlah peserta">
+        </div>
+        
+        <div class="form-group">
+          <label for="jumlahLauk"><i class="fas fa-drumstick-bite"></i> Jumlah Variasi Lauk</label>
+          <input type="number" id="jumlahLauk" min="0" required placeholder="Jumlah variasi lauk">
+        </div>
+        
+        <div class="form-group">
+          <label><i class="fas fa-plus-circle"></i> Menu Tambahan</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="menuNasi"> <i class="fas fa-rice"></i> Nasi</label>
+            <label><input type="checkbox" id="menuSup"> <i class="fas fa-utensil-spoon"></i> Sup</label>
+            <label><input type="checkbox" id="menuEs"> <i class="fas fa-ice-cream"></i> Es Batu</label>
+            <label><input type="checkbox" id="menuTeh"> <i class="fas fa-mug-hot"></i> Teh</label>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="tempat"><i class="fas fa-map-marker-alt"></i> Tempat yang Dipilih</label>
+          <select id="tempat" required>
+            <option value="">-- Pilih Tempat --</option>
+            <option value="Lantai 1 depan">Lantai 1 depan</option>
+            <option value="Lantai 1 tengah">Lantai 1 tengah</option>
+            <option value="Lantai 1 belakang">Lantai 1 belakang</option>
+            <option value="Meeting room">Meeting room</option>
+            <option value="Lantai 2">Lantai 2</option>
+            <option value="Lantai 3 barat">Lantai 3 barat</option>
+            <option value="Lantai 3 timur">Lantai 3 timur</option>
+            <option value="Gubug 1">Gubug 1</option>
+            <option value="Gubug 2">Gubug 2</option>
+            <option value="Gubug 3">Gubug 3</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="request"><i class="fas fa-comment-dots"></i> Request Tambahan</label>
+          <textarea id="request" rows="3" placeholder="Masukkan request tambahan jika ada"></textarea>
+        </div>
+        
+        <button type="submit" class="btn"><i class="fas fa-plus"></i> Tambah Reservasi</button>
+      </form>
+    </div>
+
+    <div class="main-card">
+      <h2><i class="fas fa-list"></i> Daftar Reservasi</h2>
+      <div id="reservationsList">
+        <div class="empty-state">
+          <i class="fas fa-clipboard-list"></i>
+          <p>Belum ada reservasi yang ditambahkan</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -199,7 +584,33 @@
         stokGlobal[kategori][index].stok = parseInt(input.value);
       }
       localStorage.setItem("stokData", JSON.stringify(stokGlobal));
-      alert("Stok berhasil diperbarui!");
+      
+      // Tampilkan notifikasi sukses
+      const notification = document.createElement('div');
+      notification.style.position = 'fixed';
+      notification.style.bottom = '20px';
+      notification.style.right = '20px';
+      notification.style.backgroundColor = '#4BB543';
+      notification.style.color = 'white';
+      notification.style.padding = '15px 25px';
+      notification.style.borderRadius = '8px';
+      notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+      notification.style.zIndex = '1000';
+      notification.style.display = 'flex';
+      notification.style.alignItems = 'center';
+      notification.style.gap = '10px';
+      notification.innerHTML = `
+        <i class="fas fa-check-circle" style="font-size: 1.2rem;"></i>
+        <span>Stok berhasil diperbarui!</span>
+      `;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.transition = 'opacity 0.5s ease';
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 500);
+      }, 3000);
+      
       document.getElementById("stokForm").style.display = "none";
     }
 
@@ -208,42 +619,82 @@
       if (pin === "437666") {
         tampilkanFormStok();
       } else {
-        alert("PIN salah!");
+        // Tampilkan notifikasi error
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.bottom = '20px';
+        notification.style.right = '20px';
+        notification.style.backgroundColor = '#ff3333';
+        notification.style.color = 'white';
+        notification.style.padding = '15px 25px';
+        notification.style.borderRadius = '8px';
+        notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        notification.style.zIndex = '1000';
+        notification.style.display = 'flex';
+        notification.style.alignItems = 'center';
+        notification.style.gap = '10px';
+        notification.innerHTML = `
+          <i class="fas fa-exclamation-circle" style="font-size: 1.2rem;"></i>
+          <span>PIN salah!</span>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.style.transition = 'opacity 0.5s ease';
+          notification.style.opacity = '0';
+          setTimeout(() => notification.remove(), 500);
+        }, 3000);
       }
     }
 
     function tampilkanFormStok() {
       const container = document.getElementById("stokForm");
       container.innerHTML = "";
+      
       for (let kategori in stokGlobal) {
         const judul = document.createElement("h3");
-        judul.textContent = kategori.toUpperCase();
+        judul.innerHTML = `<i class="fas fa-${getIconByCategory(kategori)}"></i> ${kategori.toUpperCase()}`;
         container.appendChild(judul);
 
         stokGlobal[kategori].forEach((item, index) => {
           const div = document.createElement("div");
-          div.className = "form-group";
+          div.className = "stok-item";
           div.innerHTML = `
-            <label>${item.nama} (Kapasitas: ${item.kapasitas})</label>
+            <label>${item.nama} <small>(Kapasitas: ${item.kapasitas})</small></label>
             <input type="number" class="input-stok" data-key="${kategori}-${index}" value="${item.stok}" min="0">
           `;
           container.appendChild(div);
         });
       }
 
+      const stokActions = document.createElement("div");
+      stokActions.className = "stok-actions";
+      
       const simpanBtn = document.createElement("button");
       simpanBtn.className = "btn";
-      simpanBtn.textContent = "Simpan Stok";
+      simpanBtn.innerHTML = `<i class="fas fa-save"></i> Simpan Stok`;
       simpanBtn.onclick = simpanStokBaru;
-      container.appendChild(simpanBtn);
-
+      stokActions.appendChild(simpanBtn);
+      
+      container.appendChild(stokActions);
       container.style.display = "block";
+    }
+    
+    function getIconByCategory(kategori) {
+      switch(kategori) {
+        case 'lauk': return 'drumstick-bite';
+        case 'nasi': return 'rice';
+        case 'sup': return 'bowl-food';
+        case 'es': return 'snowflake';
+        case 'teh': return 'mug-hot';
+        default: return 'box';
+      }
     }
 
     document.getElementById("reservationForm").addEventListener("submit", function (e) {
       e.preventDefault();
       if (reservations.length >= 10) {
-        alert("Maksimal 10 reservasi per hari.");
+        showAlert('error', 'Maksimal 10 reservasi per hari.');
         return;
       }
 
@@ -281,6 +732,9 @@
       reservations.push(reservasi);
       tampilkanReservasi();
       this.reset();
+      
+      // Tampilkan notifikasi sukses
+      showAlert('success', 'Reservasi berhasil ditambahkan!');
     });
 
     function hitungAlokasi(peserta, jumlahLauk, menu, stok) {
@@ -327,21 +781,60 @@
 
     function tampilkanReservasi() {
       const list = document.getElementById("reservationsList");
+      
+      if (reservations.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list"></i>
+            <p>Belum ada reservasi yang ditambahkan</p>
+          </div>
+        `;
+        return;
+      }
+      
       list.innerHTML = "";
       reservations.forEach((r, i) => {
         const div = document.createElement("div");
         div.className = "reservation-card";
         div.innerHTML = `
-          <h3>${i + 1}. ${r.nama} - Jam: ${r.jam}</h3>
-          <p><strong>Tempat:</strong> ${r.tempat}</p>
-          <p><strong>Peserta:</strong> ${r.peserta}</p>
-          <p><strong>Variasi Lauk:</strong> ${r.jumlahLauk}</p>
-          <p><strong>Request:</strong> ${r.request}</p>
-          <p><strong>Alokasi Peralatan:</strong></p>
+          <h3>${i + 1}. ${r.nama}</h3>
+          <p><strong><i class="fas fa-clock"></i> Jam:</strong> ${r.jam}</p>
+          <p><strong><i class="fas fa-map-marker-alt"></i> Tempat:</strong> ${r.tempat}</p>
+          <p><strong><i class="fas fa-users"></i> Peserta:</strong> ${r.peserta}</p>
+          <p><strong><i class="fas fa-drumstick-bite"></i> Variasi Lauk:</strong> ${r.jumlahLauk}</p>
+          ${r.request ? `<p><strong><i class="fas fa-comment"></i> Request:</strong> ${r.request}</p>` : ''}
+          <p><strong><i class="fas fa-utensils"></i> Alokasi Peralatan:</strong></p>
           <ul>${r.alokasi.map(a => `<li>${a}</li>`).join('')}</ul>
         `;
         list.appendChild(div);
       });
+    }
+    
+    function showAlert(type, message) {
+      const notification = document.createElement('div');
+      notification.style.position = 'fixed';
+      notification.style.bottom = '20px';
+      notification.style.right = '20px';
+      notification.style.backgroundColor = type === 'success' ? '#4BB543' : '#ff3333';
+      notification.style.color = 'white';
+      notification.style.padding = '15px 25px';
+      notification.style.borderRadius = '8px';
+      notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+      notification.style.zIndex = '1000';
+      notification.style.display = 'flex';
+      notification.style.alignItems = 'center';
+      notification.style.gap = '10px';
+      notification.innerHTML = `
+        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}" style="font-size: 1.2rem;"></i>
+        <span>${message}</span>
+      `;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.transition = 'opacity 0.5s ease';
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 500);
+      }, 3000);
     }
   </script>
 </body>
