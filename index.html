@@ -1,292 +1,1086 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reservasi Dolan Sawah</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Reservasi Dolan Sawah</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #8BC34A;
+            --accent-color: #CDDC39;
+            --dark-color: #2E7D32;
+            --light-color: #F1F8E9;
+            --danger-color: #F44336;
+            --warning-color: #FFC107;
+            --info-color: #2196F3;
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+        }
 
-    header {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px;
-      text-align: center;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    .tab {
-      overflow: hidden;
-      background-color: #f1f1f1;
-    }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
 
-    .tab button {
-      background-color: inherit;
-      border: none;
-      outline: none;
-      padding: 14px 16px;
-      cursor: pointer;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-    .tab button:hover {
-      background-color: #ddd;
-    }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    .tab button.active {
-      background-color: #ccc;
-    }
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
 
-    .tabcontent {
-      display: none;
-      padding: 20px;
-    }
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
 
-    table, th, td {
-      border: 1px solid #ddd;
-    }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: none;
+            outline: none;
+            transition: 0.3s;
+            font-size: 1rem;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
 
-    th, td {
-      padding: 8px;
-      text-align: left;
-    }
+        .tab:hover {
+            background-color: #ddd;
+        }
 
-    @media screen and (max-width: 600px) {
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
 
-      th {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-      }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s;
+        }
 
-      td {
-        position: relative;
-        padding-left: 50%;
-      }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-      td::before {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 45%;
-        padding-left: 15px;
-        white-space: nowrap;
-      }
-    }
-  </style>
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--dark-color);
+        }
+
+        .reservation-list {
+            margin-top: 20px;
+        }
+
+        .reservation-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .reservation-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .reservation-card p {
+            margin-bottom: 5px;
+        }
+
+        .menu-details {
+            margin-top: 10px;
+            padding-left: 15px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .allocation {
+            margin-top: 15px;
+        }
+
+        .allocation-item {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .ds {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .sw {
+            background-color: #FFEBEE;
+            color: #C62828;
+            border: 1px solid var(--danger-color);
+        }
+
+        .refill {
+            background-color: #FFF8E1;
+            color: #FF8F00;
+            border: 1px solid var(--warning-color);
+        }
+
+        .stok-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .stok-table th, .stok-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .stok-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .stok-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .stok-table tr:hover {
+            background-color: #ddd;
+        }
+
+        .place-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .place-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .capacity-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            width: 200px;
+            overflow: hidden;
+        }
+
+        .capacity-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        .share-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #E3F2FD;
+            border-radius: 8px;
+        }
+
+        .share-section input {
+            margin-bottom: 10px;
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .summary-title {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                border-radius: 0;
+                margin-right: 0;
+                margin-bottom: 2px;
+            }
+            
+            .place-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .capacity-bar {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Sistem Reservasi Dolan Sawah</h1>
+            <p>by Ryan</p>
+        </header>
 
-  <header>
-    <h1>Sistem Reservasi Dolan Sawah</h1>
-    <p>by Ryan</p>
-  </header>
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'reservasi')">Reservasi</button>
+            <button class="tab" onclick="openTab(event, 'stok')">Stok Perlengkapan</button>
+            <button class="tab" onclick="openTab(event, 'tempat')">Info Tempat</button>
+            <button class="tab" onclick="openTab(event, 'rangkuman')">Rangkuman</button>
+        </div>
 
-  <nav class="tab">
-    <button class="tablinks" onclick="openTab(event, 'Reservasi')" id="defaultOpen">Reservasi</button>
-    <button class="tablinks" onclick="openTab(event, 'Rangkuman')">Rangkuman</button>
-    <button class="tablinks" onclick="openTab(event, 'Stok')">Stok Perlengkapan</button>
-    <button class="tablinks" onclick="openTab(event, 'Tempat')">Info Tempat</button>
-  </nav>
+        <div id="reservasi" class="tab-content active">
+            <form id="reservationForm">
+                <div class="form-group">
+                    <label for="namaReservasi">Nama Reservasi:</label>
+                    <input type="text" id="namaReservasi" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jumlahPeserta">Jumlah Peserta:</label>
+                    <input type="number" id="jumlahPeserta" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="jamReservasi">Jam Reservasi:</label>
+                    <input type="time" id="jamReservasi" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pilihanTempat">Pilihan Tempat:</label>
+                    <select id="pilihanTempat" required>
+                        <option value="">-- Pilih Tempat --</option>
+                        <option value="Lantai 1">Lantai 1 (240 orang)</option>
+                        <option value="Lantai 2">Lantai 2 (64 orang)</option>
+                        <option value="Lantai 3">Lantai 3 (112 orang)</option>
+                        <option value="Gubug 1">Gubug 1 (40 orang)</option>
+                        <option value="Gubug 2">Gubug 2 (15 orang)</option>
+                        <option value="Gubug 3">Gubug 3 (110 orang)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pilihanMenu">Pilihan Menu:</label>
+                    <select id="pilihanMenu" required>
+                        <option value="">-- Pilih Menu --</option>
+                        <option value="Paket A">Paket A</option>
+                        <option value="Paket B">Paket B</option>
+                        <option value="Paket C">Paket C</option>
+                        <option value="Paket D">Paket D</option>
+                        <option value="Paket E">Paket E</option>
+                        <option value="Paket F">Paket F</option>
+                        <option value="Paket G">Paket G</option>
+                        <option value="Paket H">Paket H</option>
+                        <option value="Paket I">Paket I</option>
+                        <option value="Paket J">Paket J</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="requestTambahan">Request Tambahan:</label>
+                    <textarea id="requestTambahan" rows="3"></textarea>
+                </div>
+                
+                <button type="submit">Tambah Reservasi</button>
+            </form>
+            
+            <div class="reservation-list" id="reservationList">
+                <!-- Reservasi akan ditampilkan di sini -->
+            </div>
+        </div>
 
-  <div id="Reservasi" class="tabcontent">
-    <form id="reservationForm">
-      <label>Nama Reservasi:</label>
-      <input type="text" name="nama" required><br>
+        <div id="stok" class="tab-content">
+            <h2>Stok Perlengkapan Penyajian</h2>
+            <table class="stok-table">
+                <thead>
+                    <tr>
+                        <th>Nama Perlengkapan</th>
+                        <th>Kapasitas</th>
+                        <th>Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody id="stokTableBody">
+                    <!-- Data stok akan diisi oleh JavaScript -->
+                </tbody>
+            </table>
+            
+            <h2 style="margin-top: 30px;">Stok Alat (Tidak Terbatas)</h2>
+            <p>Alat-alat tersedia dalam jumlah tidak terbatas sesuai kebutuhan.</p>
+        </div>
 
-      <label>Jumlah Peserta:</label>
-      <input type="number" name="jumlah" required><br>
+        <div id="tempat" class="tab-content">
+            <h2>Ketersediaan Tempat</h2>
+            <div id="tempatList">
+                <!-- Info tempat akan diisi oleh JavaScript -->
+            </div>
+        </div>
 
-      <label>Jam Reservasi:</label>
-      <input type="time" name="jam" required><br>
+        <div id="rangkuman" class="tab-content">
+            <div class="summary-header">
+                <h2 class="summary-title">Rangkuman Reservasi</h2>
+            </div>
+            
+            <div id="summaryList">
+                <!-- Rangkuman reservasi akan diisi oleh JavaScript -->
+            </div>
+            
+            <div class="share-section">
+                <h3>Bagikan Rangkuman</h3>
+                <input type="tel" id="whatsappNumber" placeholder="Masukkan nomor WhatsApp">
+                <button onclick="shareSummary()">Bagikan via WhatsApp</button>
+            </div>
+        </div>
+    </div>
 
-      <label>Pilihan Tempat:</label>
-      <select name="tempat" required>
-        <option value="Lantai 1">Lantai 1</option>
-        <option value="Lantai 2">Lantai 2</option>
-        <option value="Lantai 3">Lantai 3</option>
-        <option value="Gubug 1">Gubug 1</option>
-        <option value="Gubug 2">Gubug 2</option>
-        <option value="Gubug 3">Gubug 3</option>
-      </select><br>
+    <script>
+        // Data tempat
+        const tempatData = {
+            "Lantai 1": { kapasitas: 240, tersedia: 240 },
+            "Lantai 2": { kapasitas: 64, tersedia: 64 },
+            "Lantai 3": { kapasitas: 112, tersedia: 112 },
+            "Gubug 1": { kapasitas: 40, tersedia: 40 },
+            "Gubug 2": { kapasitas: 15, tersedia: 15 },
+            "Gubug 3": { kapasitas: 110, tersedia: 110 }
+        };
 
-      <label>Pilihan Menu:</label>
-      <select name="menu" required>
-        <option value="Paket A">Paket A</option>
-        <option value="Paket B">Paket B</option>
-        <option value="Paket C">Paket C</option>
-        <option value="Paket D">Paket D</option>
-        <option value="Paket E">Paket E</option>
-        <option value="Paket F">Paket F</option>
-        <option value="Paket G">Paket G</option>
-        <option value="Paket H">Paket H</option>
-        <option value="Paket I">Paket I</option>
-        <option value="Paket J">Paket J</option>
-      </select><br>
+        // Data menu
+        const menuData = {
+            "Paket A": {
+                items: [
+                    "Nasi putih (penyajian: Magicom)(alat: centong nasi)",
+                    "Ayam kremes (penyajian: rolltop)(alat: Capitan)",
+                    "Sambel (penyajian: mangkok sambel)(alat: -)",
+                    "Lalapan (penyajian: piring lalapan)(alat: Capitan)",
+                    "Teh (penyajian: dispenser teh)(alat: -)",
+                    "Es (penyajian: termos es)(alat: Capitan es)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    gelas: true,
+                    sendokGarpu: true
+                }
+            },
+            "Paket B": {
+                items: [
+                    "Nasi putih (penyajian: Magicom)(alat: centong nasi)",
+                    "Daging kelem (penyajian: roll top)(alat: sendok lauk)",
+                    "Bakmi (penyajian: roll top)(alat: Capitan)",
+                    "Teh (penyajian: dispenser teh)(alat: -)",
+                    "Es (penyajian: termos es)(alat: Capitan es)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    gelas: true,
+                    sendokGarpu: true
+                }
+            },
+            "Paket C": {
+                items: [
+                    "Nasi putih (penyajian: Magicom)(alat: centong nasi)",
+                    "Ayam geprek (penyajian: roll top) (alat: Capitan)",
+                    "Sop Sosis jamur (penyajian: pemanas sup)(alat: centong sop)",
+                    "Semangka (penyajian: -)(alat: -)",
+                    "Teh (penyajian: dispenser teh)(alat: a)",
+                    "Es (penyajian: termos es)(alat: Capitan es)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    gelas: true,
+                    sendokGarpu: true,
+                    mangkukSop: true,
+                    pemanasSup: true
+                }
+            },
+            "Paket D": {
+                items: [
+                    "Nasi putih (penyajian: Magicom)(alat: centong nasi)",
+                    "Nila bakar (penyajian: roll top)(alat: Capitan)",
+                    "Sayur asem (penyajian: pemanas sup)(alat: centong sop)",
+                    "Sambal (penyajian: mangkok sambel)(alat: -)",
+                    "Pisang goreng (penyajian: -)(alat: Capitan)",
+                    "Teh (penyajian: dispenser teh)(alat: -)",
+                    "Es (penyajian: termos es)(alat: Capitan es)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    gelas: true,
+                    sendokGarpu: true,
+                    mangkukSop: true,
+                    pemanasSup: true,
+                    piringSnack: true
+                }
+            },
+            "Paket E": {
+                items: [
+                    "Nasi putih (Penyajian: Magicom)(alat: centong nasi)",
+                    "Ayam lada hitam (penyajian: roll top)(alat: sendok lauk)",
+                    "Capcay (penyajian: roll top)(alat: sendok lauk)",
+                    "Soun jamur (penyajian: roll top)(alat: Capitan)",
+                    "Bakso kuah (penyajian: pemanas sup)(alat: centong sop)",
+                    "Kerupuk (penyajian: toples kerupuk)(alat: -)",
+                    "Bolu gulung (penyajian: -)(alat: -)",
+                    "Teh (penyajian: dispenser teh)(alat: -)",
+                    "Es (penyajian: termos es)(alat: Capitan es)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    gelas: true,
+                    sendokGarpu: true,
+                    mangkukSop: true,
+                    pemanasSup: true,
+                    piringSnack: true
+                }
+            },
+            "Paket F": {
+                items: [
+                    "Steak Ayam (penyajian: -)(alat: -)",
+                    "Kentang goreng (penyajian: -)(alat: -)",
+                    "Wortel + buncis (penyajian: -)(alat: -)",
+                    "Puding Fla (penyajian: -)(alat: -)",
+                    "Soft drink (penyajian: dispenser softdrink)(alat: -)",
+                    "Air mineral cup (penyajian: -)(alat: -)"
+                ],
+                needs: {
+                    dispenserSoftdrink: true,
+                    paperCup: true,
+                    piringMelamin: true,
+                    pisauSteak: true,
+                    garpuSteak: true
+                }
+            },
+            "Paket G": {
+                items: [
+                    "Nasi putih (penyajian: Magicom)(alat: centong nasi)",
+                    "Kakap asam manis (penyajian: roll top)(alat: sendok lauk)",
+                    "Ayam goreng mentega (penyajian: roll top)(alat: sendok lauk)",
+                    "Tumis buncis daging sapi (penyajian: roll top)(alat: sendok lauk)",
+                    "Sambal (penyajian: -)(alat: -)",
+                    "Teh (penyajian: dispenser teh)(alat: -)",
+                    "Es (penyajian: termos es)(alat: Capitan es)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    gelas: true,
+                    sendokGarpu: true
+                }
+            },
+            "Paket H": {
+                items: [
+                    "Nasi putih (penyajian: Magicom)(alat: centong nasi)",
+                    "Sup iga sapi (penyajian: pemanas sup)(alat: centong sop)",
+                    "Kerupuk udang (penyajian: toples kerupuk)(alat: -)",
+                    "Sambel kecap (penyajian: -)(alat: -)",
+                    "Tahu + tempe goreng (penyajian: roll top) (alat: Capitan)",
+                    "Sosis solo (penyajian: -)(alat: -)",
+                    "Bolu gulung (penyajian: -)(alat: -)",
+                    "Teh (penyajian: dispenser teh)(alat: -)",
+                    "Es (penyajian: termos es)(alat: Capitan es)",
+                    "Air mineral cup (penyajian: -)(alat: -)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    gelas: true,
+                    sendokGarpu: true,
+                    mangkukSop: true,
+                    pemanasSup: true,
+                    piringSnack: true,
+                    paperCup: true
+                }
+            },
+            "Paket I": {
+                items: [
+                    "Nasi (penyajian: Magicom)(alat: centong nasi)",
+                    "Iga bakar (penyajian: roll top)(alat: Capitan)",
+                    "Sop (penyajian: pemanas sup)(alat: centong sop)",
+                    "Sambal (penyajian: -)(alat: -)",
+                    "Kerupuk (penyajian: toples kerupuk)(alat: -)",
+                    "Lalapan (penyajian: -)(alat: -)",
+                    "Sosis solo (penyajian: -)(alat: -)",
+                    "Semangka (penyajian: -)(alat: -)",
+                    "Teh (penyajian: dispenser teh)(alat: -)",
+                    "Es (penyajian: termos es)(alat: -)",
+                    "Air mineral (penyajian: -)(alat: -)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    gelas: true,
+                    sendokGarpu: true,
+                    mangkukSop: true,
+                    pemanasSup: true,
+                    piringSnack: true,
+                    paperCup: true
+                },
+                specialNote: "1 porsi 2 potong"
+            },
+            "Paket J": {
+                items: [
+                    "Nasi (penyajian: Magicom)(alat: centong nasi)",
+                    "Sambel goreng ati (penyajian: roll top)(alat: sendok lauk)",
+                    "Bihun goreng (penyajian: roll top)(alat: Capitan)",
+                    "Daging kelem (penyajian: roll top)(alat: sendok lauk)",
+                    "Acar kuning (penyajian: roll top)(alat: sendok lauk)",
+                    "Kerupuk udang (penyajian: toples kerupuk)(alat: -)",
+                    "Sop Sosis jamur (penyajian: pemanas sup)(alat: centong sop)",
+                    "Sosis solo (penyajian: -)(alat: -)",
+                    "Pie buah (penyajian: -)(alat: -)",
+                    "Teh (penyajian: dispenser teh)(alat: -)",
+                    "Softdrink (penyajian: dispenser softdrink)(alat: -)",
+                    "Air mineral cup (penyajian: -)(alat: -)"
+                ],
+                needs: {
+                    magicom: true,
+                    rolltop: true,
+                    termosEs: true,
+                    dispenserTeh: true,
+                    dispenserSoftdrink: true,
+                    gelas: true,
+                    sendokGarpu: true,
+                    mangkukSop: true,
+                    pemanasSup: true,
+                    piringSnack: true,
+                    paperCup: true
+                }
+            }
+        };
 
-      <label>Request Tambahan:</label>
-      <input type="text" name="request"><br>
+        // Data stok penyajian
+        const stokPenyajian = {
+            "Roll top panjang": { kapasitas: "40-80 orang", jumlah: 2, tersedia: 2, type: "rolltop" },
+            "Roll top sedang": { kapasitas: "25-39 orang", jumlah: 2, tersedia: 2, type: "rolltop" },
+            "Roll top bulat": { kapasitas: "25-35 orang", jumlah: 2, tersedia: 2, type: "rolltop" },
+            "Roll top kotak kecil": { kapasitas: "20-24 orang", jumlah: 5, tersedia: 5, type: "rolltop" },
+            "Magicom besar": { kapasitas: "maksimal 80 orang", jumlah: 3, tersedia: 3, type: "magicom" },
+            "Magicom kecil": { kapasitas: "maksimal 20 orang", jumlah: 1, tersedia: 1, type: "magicom" },
+            "Pemanas sup kecil": { kapasitas: "maksimal 39 orang", jumlah: 2, tersedia: 2, type: "pemanasSup" },
+            "Pemanas sup besar": { kapasitas: "maksimal 80 orang", jumlah: 1, tersedia: 1, type: "pemanasSup" },
+            "Termos es kecil": { kapasitas: "maksimal 20 orang", jumlah: 2, tersedia: 2, type: "termosEs" },
+            "Termos es sedang": { kapasitas: "maksimal 35 orang", jumlah: 1, tersedia: 1, type: "termosEs" },
+            "Termos es besar": { kapasitas: "maksimal 80 orang", jumlah: 5, tersedia: 5, type: "termosEs" },
+            "Dispenser teh kecil": { kapasitas: "maksimal 32 orang", jumlah: 5, tersedia: 5, type: "dispenserTeh" },
+            "Dispenser teh sedang": { kapasitas: "45 orang", jumlah: 1, tersedia: 1, type: "dispenserTeh" },
+            "Dispenser teh double": { kapasitas: "100 orang", jumlah: 1, tersedia: 1, type: "dispenserTeh" },
+            "Dispenser teh besar": { kapasitas: "166 orang", jumlah: 1, tersedia: 1, type: "dispenserTeh" },
+            "Toples kerupuk besar": { kapasitas: "-", jumlah: 1, tersedia: 1, type: "toplesKerupuk" }
+        };
 
-      <button type="submit">Tambah Reservasi</button>
-    </form>
-  </div>
+        // Data reservasi
+        let reservations = [];
 
-  <div id="Rangkuman" class="tabcontent">
-    <div id="summaryContent"></div>
-    <label>Nomor WhatsApp:</label>
-    <input type="text" id="waNumber" placeholder="Contoh: 6281234567890">
-    <button onclick="shareWhatsApp()">Share via WhatsApp</button>
-  </div>
+        // Fungsi untuk membuka tab
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            // Perbarui tampilan saat tab diubah
+            if (tabName === 'tempat') {
+                updateTempatDisplay();
+            } else if (tabName === 'rangkuman') {
+                updateSummaryDisplay();
+            } else if (tabName === 'stok') {
+                updateStokDisplay();
+            }
+        }
 
-  <div id="Stok" class="tabcontent">
-    <table>
-      <thead>
-        <tr>
-          <th>Nama Perlengkapan</th>
-          <th>Jenis</th>
-          <th>Kapasitas</th>
-          <th>Jumlah Tersedia</th>
-        </tr>
-      </thead>
-      <tbody id="stokTable"></tbody>
-    </table>
-  </div>
+        // Fungsi untuk memformat waktu
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            return `${hours}:${minutes}`;
+        }
 
-  <div id="Tempat" class="tabcontent">
-    <table>
-      <thead>
-        <tr>
-          <th>Nama Tempat</th>
-          <th>Kapasitas Total</th>
-          <th>Kapasitas Tersisa</th>
-        </tr>
-      </thead>
-      <tbody id="tempatTable"></tbody>
-    </table>
-  </div>
+        // Fungsi untuk mendapatkan alokasi peralatan
+        function getAllocation(jumlahPeserta, menu) {
+            const allocation = [];
+            const needs = menuData[menu].needs;
+            
+            // Alokasi Magicom
+            if (needs.magicom) {
+                const magicom = allocateItem('magicom', jumlahPeserta);
+                allocation.push(magicom);
+            }
+            
+            // Alokasi Roll Top
+            if (needs.rolltop) {
+                const rolltop = allocateRollTop(jumlahPeserta);
+                allocation.push(...rolltop);
+            }
+            
+            // Alokasi Termos Es
+            if (needs.termosEs) {
+                const termosEs = allocateItem('termosEs', jumlahPeserta);
+                allocation.push(termosEs);
+            }
+            
+            // Alokasi Dispenser Teh
+            if (needs.dispenserTeh) {
+                const dispenserTeh = allocateItem('dispenserTeh', jumlahPeserta);
+                allocation.push(dispenserTeh);
+            }
+            
+            // Alokasi Pemanas Sup
+            if (needs.pemanasSup) {
+                const pemanasSup = allocateItem('pemanasSup', jumlahPeserta);
+                allocation.push(pemanasSup);
+            }
+            
+            // Alokasi Dispenser Softdrink
+            if (needs.dispenserSoftdrink) {
+                allocation.push("Dispenser softdrink DS");
+            }
+            
+            // Alokasi Toples Kerupuk
+            if (menu === 'Paket E' || menu === 'Paket H' || menu === 'Paket I' || menu === 'Paket J') {
+                if (stokPenyajian["Toples kerupuk besar"].tersedia > 0) {
+                    allocation.push("Toples kerupuk besar DS");
+                    stokPenyajian["Toples kerupuk besar"].tersedia--;
+                } else {
+                    allocation.push("Toples kerupuk besar SW");
+                }
+            }
+            
+            // Alokasi alat tambahan
+            if (needs.gelas) {
+                if (menu === 'Paket F' || menu === 'Paket H' || menu === 'Paket I' || menu === 'Paket J') {
+                    allocation.push(`Paper cup ${jumlahPeserta} pcs`);
+                } else {
+                    allocation.push(`Gelas keramik ${jumlahPeserta} pcs`);
+                }
+            }
+            
+            if (needs.sendokGarpu) {
+                if (menu === 'Paket F') {
+                    allocation.push(`Pisau steak ${jumlahPeserta} pcs`);
+                    allocation.push(`Garpu steak ${jumlahPeserta} pcs`);
+                    allocation.push(`Piring melamin ${jumlahPeserta} pcs`);
+                } else {
+                    allocation.push(`Sendok+garpu ${jumlahPeserta} pcs`);
+                }
+            }
+            
+            if (needs.mangkukSop) {
+                allocation.push(`Mangkuk sop ${jumlahPeserta} pcs`);
+            }
+            
+            if (needs.piringSnack) {
+                if (menu === 'Paket D') {
+                    allocation.push(`Piring snack ${jumlahPeserta} pcs (untuk pisang goreng)`);
+                } else if (menu === 'Paket E' || menu === 'Paket H' || menu === 'Paket I' || menu === 'Paket J') {
+                    allocation.push(`Piring snack ${jumlahPeserta} pcs (untuk bolu gulung/sosis solo)`);
+                }
+            }
+            
+            return allocation;
+        }
 
-  <script>
-    const tempatData = {
-      "Lantai 1": 240,
-      "Lantai 2": 64,
-      "Lantai 3": 112,
-      "Gubug 1": 40,
-      "Gubug 2": 15,
-      "Gubug 3": 110
-    };
+        // Fungsi untuk mengalokasikan item
+        function allocateItem(type, jumlahPeserta) {
+            const items = Object.entries(stokPenyajian)
+                .filter(([name, data]) => data.type === type && data.tersedia > 0)
+                .sort((a, b) => {
+                    // Urutkan berdasarkan kapasitas terbesar
+                    const capA = parseInt(a[1].kapasitas) || parseInt(a[1].kapasitas.split('-')[1]) || parseInt(a[1].kapasitas.split(' ')[2]);
+                    const capB = parseInt(b[1].kapasitas) || parseInt(b[1].kapasitas.split('-')[1]) || parseInt(b[1].kapasitas.split(' ')[2]);
+                    return capB - capA;
+                });
+            
+            for (const [name, data] of items) {
+                let capacity;
+                if (data.kapasitas.includes('-')) {
+                    capacity = parseInt(data.kapasitas.split('-')[1]);
+                } else if (data.kapasitas.includes('maksimal')) {
+                    capacity = parseInt(data.kapasitas.split(' ')[1]);
+                } else {
+                    capacity = parseInt(data.kapasitas);
+                }
+                
+                if (jumlahPeserta <= capacity || items.length === 1) {
+                    data.tersedia--;
+                    return `${name} DS${jumlahPeserta > capacity ? ' Refill' : ''}`;
+                }
+            }
+            
+            // Jika tidak ada yang tersedia, sewa dari luar
+            const largestItem = items[0];
+            return `${largestItem[0]} SW${jumlahPeserta > (parseInt(largestItem[1].kapasitas.split('-')[1]) || parseInt(largestItem[1].kapasitas.split(' ')[1])) ? ' Refill' : ''}`;
+        }
 
-    const stokData = [
-      { nama: "Roll top panjang", jenis: "Penyajian", kapasitas: "40-80", jumlah: 2 },
-      { nama: "Roll top sedang", jenis: "Penyajian", kapasitas: "25-39", jumlah: 2 },
-      { nama: "Roll top bulat", jenis: "Penyajian", kapasitas: "25-35", jumlah: 2 },
-      { nama: "Roll top kotak kecil", jenis: "Penyajian", kapasitas: "20-24", jumlah: 5 },
-      { nama: "Magicom besar", jenis: "Penyajian", kapasitas: "80", jumlah: 3 },
-      { nama: "Magicom kecil", jenis: "Penyajian", kapasitas: "20", jumlah: 1 },
-      { nama: "Pemanas sup 39", jenis: "Penyajian", kapasitas: "39", jumlah: 2 },
-      { nama: "Pemanas sup 80", jenis: "Penyajian", kapasitas: "80", jumlah: 1 },
-      { nama: "Termos es kecil", jenis: "Penyajian", kapasitas: "20", jumlah: 2 },
-      { nama: "Termos es sedang", jenis: "Penyajian", kapasitas: "35", jumlah: 1 },
-      { nama: "Termos es besar", jenis: "Penyajian", kapasitas: "80", jumlah: 5 },
-      { nama: "Dispenser teh kecil", jenis: "Penyajian", kapasitas: "32", jumlah: 5 },
-      { nama: "Dispenser teh sedang", jenis: "Penyajian", kapasitas: "45", jumlah: 1 },
-      { nama: "Dispenser teh double", jenis: "Penyajian", kapasitas: "100", jumlah: 1 },
-      { nama: "Dispenser teh besar", jenis: "Penyajian", kapasitas: "166", jumlah: 1 },
-      { nama: "Toples kerupuk besar", jenis: "Penyajian", kapasitas: "-", jumlah: 1 }
-    ];
+        // Fungsi khusus untuk mengalokasikan Roll Top
+        function allocateRollTop(jumlahPeserta) {
+            const allocation = [];
+            let remaining = jumlahPeserta;
+            
+            // Prioritaskan roll top sedang daripada bulat untuk kapasitas yang sesuai
+            const rollTopOrder = [
+                { name: "Roll top panjang", min: 40, max: 80 },
+                { name: "Roll top sedang", min: 25, max: 39 },
+                { name: "Roll top bulat", min: 25, max: 35 },
+                { name: "Roll top kotak kecil", min: 20, max: 24 }
+            ];
+            
+            while (remaining > 0) {
+                let allocated = false;
+                
+                for (const rollTop of rollTopOrder) {
+                    if (remaining >= rollTop.min && stokPenyajian[rollTop.name].tersedia > 0) {
+                        const useCount = Math.min(Math.floor(remaining / rollTop.min), stokPenyajian[rollTop.name].tersedia);
+                        if (useCount > 0) {
+                            const allocatedPax = Math.min(useCount * rollTop.max, remaining);
+                            stokPenyajian[rollTop.name].tersedia -= useCount;
+                            allocation.push(`${rollTop.name} x${useCount} DS${allocatedPax > useCount * rollTop.max ? ' Refill' : ''}`);
+                            remaining -= allocatedPax;
+                            allocated = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!allocated) {
+                    // Jika tidak bisa mengalokasikan, gunakan yang terbesar yang tersedia
+                    const availableRollTops = rollTopOrder.filter(rt => stokPenyajian[rt.name].tersedia > 0);
+                    if (availableRollTops.length > 0) {
+                        const largestAvailable = availableRollTops[0];
+                        stokPenyajian[largestAvailable.name].tersedia--;
+                        allocation.push(`${largestAvailable.name} DS Refill`);
+                        remaining = 0;
+                    } else {
+                        // Jika tidak ada yang tersedia, sewa dari luar
+                        allocation.push(`Roll top panjang SW Refill`);
+                        remaining = 0;
+                    }
+                }
+            }
+            
+            return allocation;
+        }
 
-    let reservasiList = [];
+        // Fungsi untuk menambahkan reservasi
+        function addReservation(event) {
+            event.preventDefault();
+            
+            if (reservations.length >= 12) {
+                alert("Maksimal 12 reservasi telah tercapai.");
+                return;
+            }
+            
+            const namaReservasi = document.getElementById("namaReservasi").value;
+            const jumlahPeserta = parseInt(document.getElementById("jumlahPeserta").value);
+            const jamReservasi = document.getElementById("jamReservasi").value;
+            const pilihanTempat = document.getElementById("pilihanTempat").value;
+            const pilihanMenu = document.getElementById("pilihanMenu").value;
+            const requestTambahan = document.getElementById("requestTambahan").value;
+            
+            // Validasi kapasitas tempat
+            const tempat = pilihanTempat.split(' (')[0];
+            if (tempatData[tempat].tersedia < jumlahPeserta) {
+                alert(`Kapasitas tidak mencukupi untuk ${tempat}. Tersedia: ${tempatData[tempat].tersedia}, Dibutuhkan: ${jumlahPeserta}`);
+                return;
+            }
+            
+            // Kurangi ketersediaan tempat
+            tempatData[tempat].tersedia -= jumlahPeserta;
+            
+            // Dapatkan alokasi peralatan
+            const alokasiPeralatan = getAllocation(jumlahPeserta, pilihanMenu);
+            
+            // Tambahkan ke daftar reservasi
+            const reservation = {
+                id: Date.now(),
+                nama: namaReservasi,
+                jumlah: jumlahPeserta,
+                jam: jamReservasi,
+                tempat: pilihanTempat,
+                menu: pilihanMenu,
+                request: requestTambahan,
+                alokasi: alokasiPeralatan
+            };
+            
+            reservations.push(reservation);
+            
+            // Reset form
+            document.getElementById("reservationForm").reset();
+            
+            // Perbarui tampilan
+            updateReservationList();
+            updateTempatDisplay();
+            
+            // Buka tab rangkuman
+            document.querySelector('.tab[onclick*="rangkuman"]').click();
+        }
 
-    document.getElementById("reservationForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const form = e.target;
-      const reservasi = {
-        nama: form.nama.value,
-        jumlah: parseInt(form.jumlah.value),
-        jam: form.jam.value,
-        tempat: form.tempat.value,
-        menu: form.menu.value,
-        request: form.request.value
-      };
-      reservasiList.push(reservasi);
-      alert("Reservasi ditambahkan!");
-      form.reset();
-    });
+        // Fungsi untuk memperbarui tampilan daftar reservasi
+        function updateReservationList() {
+            const reservationList = document.getElementById("reservationList");
+            reservationList.innerHTML = '';
+            
+            if (reservations.length === 0) {
+                reservationList.innerHTML = '<p>Belum ada reservasi.</p>';
+                return;
+            }
+            
+            reservations.forEach(reservation => {
+                const card = document.createElement("div");
+                card.className = "reservation-card";
+                card.innerHTML = `
+                    <h3>${reservation.nama}</h3>
+                    <p><strong>${reservation.jumlah} pax</strong></p>
+                    <p>Pukul ${formatTime(reservation.jam)}</p>
+                    <p>${reservation.tempat}</p>
+                    <div class="menu-details">
+                        <p><strong>Menu:</strong></p>
+                        <p>${menuData[reservation.menu].items.join(', ')}</p>
+                        ${reservation.request ? `<p><strong>Request:</strong> ${reservation.request}</p>` : ''}
+                    </div>
+                `;
+                reservationList.appendChild(card);
+            });
+        }
 
-    function openTab(evt, tabName) {
-      const tabcontent = document.getElementsByClassName("tabcontent");
-      for (let i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-      }
+        // Fungsi untuk memperbarui tampilan stok
+        function updateStokDisplay() {
+            const stokTableBody = document.getElementById("stokTableBody");
+            stokTableBody.innerHTML = '';
+            
+            for (const [name, data] of Object.entries(stokPenyajian)) {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${name}</td>
+                    <td>${data.kapasitas}</td>
+                    <td>${data.tersedia} / ${data.jumlah}</td>
+                `;
+                stokTableBody.appendChild(row);
+            }
+        }
 
-      const tablinks = document.getElementsByClassName("tablinks");
-      for (let i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-      }
+        // Fungsi untuk memperbarui tampilan tempat
+        function updateTempatDisplay() {
+            const tempatList = document.getElementById("tempatList");
+            tempatList.innerHTML = '';
+            
+            for (const [name, data] of Object.entries(tempatData)) {
+                const persenTersedia = (data.tersedia / data.kapasitas) * 100;
+                
+                const card = document.createElement("div");
+                card.className = "place-card";
+                card.innerHTML = `
+                    <div>
+                        <h3>${name}</h3>
+                        <p>Kapasitas: ${data.kapasitas} orang</p>
+                        <p>Tersedia: ${data.tersedia} orang</p>
+                    </div>
+                    <div>
+                        <div class="capacity-bar">
+                            <div class="capacity-fill" style="width: ${persenTersedia}%"></div>
+                        </div>
+                    </div>
+                `;
+                tempatList.appendChild(card);
+            }
+        }
 
-      document.getElementById(tabName).style.display = "block";
-      evt.currentTarget.className += " active";
+        // Fungsi untuk memperbarui tampilan rangkuman
+        function updateSummaryDisplay() {
+            const summaryList = document.getElementById("summaryList");
+            summaryList.innerHTML = '';
+            
+            if (reservations.length === 0) {
+                summaryList.innerHTML = '<p>Belum ada reservasi.</p>';
+                return;
+            }
+            
+            reservations.forEach(reservation => {
+                const card = document.createElement("div");
+                card.className = "reservation-card";
+                
+                const menuItems = menuData[reservation.menu].items.map(item => {
+                    return item.split(' (')[0];
+                }).join(', ');
+                
+                let specialNote = '';
+                if (menuData[reservation.menu].specialNote) {
+                    specialNote = `<p><em>${menuData[reservation.menu].specialNote}</em></p>`;
+                }
+                
+                card.innerHTML = `
+                    <h3>${reservation.nama}</h3>
+                    <p><strong>${reservation.jumlah} pax</strong></p>
+                    <p>Pukul ${formatTime(reservation.jam)}</p>
+                    <p>${reservation.tempat}</p>
+                    <div class="menu-details">
+                        <p><strong>Menu:</strong></p>
+                        <p>${menuItems}</p>
+                        ${specialNote}
+                        ${reservation.request ? `<p><strong>Request:</strong> ${reservation.request}</p>` : ''}
+                    </div>
+                    <div class="allocation">
+                        <p><strong>Alokasi peralatan:</strong></p>
+                        ${reservation.alokasi.map(item => {
+                            let className = 'allocation-item';
+                            if (item.includes('DS')) className += ' ds';
+                            if (item.includes('SW')) className += ' sw';
+                            if (item.includes('Refill')) className += ' refill';
+                            return `<span class="${className}">${item}</span>`;
+                        }).join(' ')}
+                    </div>
+                `;
+                summaryList.appendChild(card);
+            });
+        }
 
-      if (tabName === "Rangkuman") tampilkanRangkuman();
-      else if (tabName === "Stok") tampilkanStok();
-      else if (tabName === "Tempat") tampilkanTempat();
-    }
+        // Fungsi untuk berbagi rangkuman via WhatsApp
+        function shareSummary() {
+            const phoneNumber = document.getElementById("whatsappNumber").value;
+            if (!phoneNumber) {
+                alert("Masukkan nomor WhatsApp terlebih dahulu.");
+                return;
+            }
+            
+            let message = "Rangkuman Reservasi Dolan Sawah:\n\n";
+            
+            reservations.forEach(reservation => {
+                const menuItems = menuData[reservation.menu].items.map(item => {
+                    return item.split(' (')[0];
+                }).join(', ');
+                
+                message += `*${reservation.nama}*\n`;
+                message += `${reservation.jumlah} pax\n`;
+                message += `Pukul ${formatTime(reservation.jam)}\n`;
+                message += `${reservation.tempat}\n`;
+                message += `Menu: ${menuItems}\n`;
+                
+                if (menuData[reservation.menu].specialNote) {
+                    message += `Catatan: ${menuData[reservation.menu].specialNote}\n`;
+                }
+                
+                if (reservation.request) {
+                    message += `Request: ${reservation.request}\n`;
+                }
+                
+                message += `Alokasi peralatan:\n`;
+                message += reservation.alokasi.join('\n') + '\n\n';
+            });
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
 
-    function tampilkanRangkuman() {
-      const container = document.getElementById("summaryContent");
-      container.innerHTML = "";
-      reservasiList.forEach((r, i) => {
-        container.innerHTML += `<p><b>${i + 1}. ${r.nama}</b> (${r.jumlah} org) - ${r.tempat}, ${r.menu}<br>Jam: ${r.jam} | Catatan: ${r.request || "-"}</p>`;
-      });
-    }
-
-    function tampilkanStok() {
-      const table = document.getElementById("stokTable");
-      table.innerHTML = "";
-      stokData.forEach(s => {
-        table.innerHTML += `<tr>
-          <td>${s.nama}</td>
-          <td>${s.jenis}</td>
-          <td>${s.kapasitas}</td>
-          <td>${s.jumlah}</td>
-        </tr>`;
-      });
-    }
-
-    function tampilkanTempat() {
-      const table = document.getElementById("tempatTable");
-      table.innerHTML = "";
-      Object.entries(tempatData).forEach(([nama, kapasitas]) => {
-        const terpakai = reservasiList.filter(r => r.tempat === nama).reduce((a, b) => a + b.jumlah, 0);
-        const tersisa = kapasitas - terpakai;
-        table.innerHTML += `<tr>
-          <td>${nama}</td>
-          <td>${kapasitas}</td>
-          <td>${tersisa}</td>
-        </tr>`;
-      });
-    }
-
-    function shareWhatsApp() {
-      const nomor = document.getElementById("waNumber").value;
-      if (!nomor) return alert("Masukkan nomor WhatsApp.");
-      const pesan = reservasiList.map((r, i) => `${i + 1}. ${r.nama} (${r.jumlah} org), ${r.tempat}, ${r.menu}, ${r.jam}, Catatan: ${r.request || "-"}`).join("\n");
-      const url = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
-      window.open(url, "_blank");
-    }
-
-    document.getElementById("defaultOpen").click();
-  </script>
-
+        // Inisialisasi
+        document.getElementById("reservationForm").addEventListener("submit", addReservation);
+        updateStokDisplay();
+        updateTempatDisplay();
+    </script>
 </body>
 </html>
