@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>Sistem Management Reservasi Dolan Sawah</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
@@ -629,6 +632,21 @@
   </div>
 
   <script>
+    // Menambahkan timestamp ke URL file CSS dan JS untuk menghindari cache
+    document.addEventListener('DOMContentLoaded', function() {
+      const links = document.querySelectorAll('link[rel="stylesheet"]');
+      links.forEach(link => {
+        if (!link.href.includes('fonts.googleapis.com') && !link.href.includes('cdnjs.cloudflare.com')) {
+          link.href += '?v=' + new Date().getTime();
+        }
+      });
+      
+      const scripts = document.querySelectorAll('script[src]');
+      scripts.forEach(script => {
+        script.src += '?v=' + new Date().getTime();
+      });
+    });
+
     const reservations = [];
 
     const stokAwal = {
