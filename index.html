@@ -24,13 +24,13 @@
       --bg-gradient: linear-gradient(135deg, #f1faee 0%, #a8dadc 100%);
       --card-gradient: linear-gradient(to bottom right, #ffffff, #f8f9fa);
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     body {
       font-family: 'Poppins', sans-serif;
       background: var(--bg-gradient);
@@ -38,13 +38,13 @@
       line-height: 1.6;
       min-height: 100vh;
     }
-    
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
     }
-    
+
     .main-card {
       background: var(--card-gradient);
       border-radius: 16px;
@@ -54,12 +54,12 @@
       border: 1px solid rgba(255, 255, 255, 0.5);
       backdrop-filter: blur(5px);
     }
-    
+
     h1, h2, h3, h4 {
       margin-bottom: 20px;
       font-weight: 600;
     }
-    
+
     h1 {
       font-size: 2.5rem;
       text-align: center;
@@ -72,7 +72,7 @@
       background-clip: text;
       color: transparent;
     }
-    
+
     h1::after {
       content: '';
       position: absolute;
@@ -84,7 +84,7 @@
       background: linear-gradient(to right, var(--primary), var(--accent));
       border-radius: 4px;
     }
-    
+
     .header-subtitle {
       text-align: center;
       font-family: 'Dancing Script', cursive;
@@ -94,7 +94,7 @@
       transform: translateY(-10px);
       text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    
+
     h2 {
       font-size: 1.8rem;
       margin-top: 30px;
@@ -103,25 +103,25 @@
       align-items: center;
       gap: 10px;
     }
-    
+
     h2 i {
       color: var(--accent);
     }
-    
+
     h3 {
       font-size: 1.4rem;
       color: var(--secondary-dark);
     }
-    
+
     h4 {
       font-size: 1.2rem;
       color: var(--dark);
     }
-    
+
     .form-group {
       margin-bottom: 25px;
     }
-    
+
     label {
       display: block;
       margin-bottom: 8px;
@@ -129,7 +129,7 @@
       color: var(--dark);
       font-size: 0.95rem;
     }
-    
+
     input[type="text"],
     input[type="time"],
     input[type="number"],
@@ -146,7 +146,7 @@
       color: var(--dark);
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
-    
+
     input[type="text"]:focus,
     input[type="time"]:focus,
     input[type="number"]:focus,
@@ -157,18 +157,18 @@
       outline: none;
       box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.2);
     }
-    
+
     textarea {
       resize: vertical;
       min-height: 120px;
     }
-    
+
     .checkbox-group {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
     }
-    
+
     .checkbox-group label {
       display: flex;
       align-items: center;
@@ -182,20 +182,20 @@
       border: 2px solid var(--light-gray);
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
-    
+
     .checkbox-group label:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 10px rgba(0,0,0,0.1);
       border-color: var(--primary-light);
     }
-    
+
     .checkbox-group input[type="checkbox"] {
       width: 18px;
       height: 18px;
       accent-color: var(--primary);
       cursor: pointer;
     }
-    
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -214,21 +214,21 @@
       letter-spacing: 0.5px;
       box-shadow: 0 4px 8px rgba(42, 157, 143, 0.3);
     }
-    
+
     .btn:hover {
       background: linear-gradient(to right, var(--primary-dark), var(--primary));
       transform: translateY(-3px);
       box-shadow: 0 6px 15px rgba(42, 157, 143, 0.4);
     }
-    
+
     .btn:active {
       transform: translateY(1px);
     }
-    
+
     .btn i {
       font-size: 1.1rem;
     }
-    
+
     .reservation-card {
       background: white;
       border-radius: 12px;
@@ -240,7 +240,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .reservation-card::before {
       content: '';
       position: absolute;
@@ -250,12 +250,12 @@
       height: 5px;
       background: linear-gradient(to right, var(--primary), var(--accent));
     }
-    
+
     .reservation-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     }
-    
+
     .reservation-card h3 {
       display: flex;
       align-items: center;
@@ -265,7 +265,7 @@
       position: relative;
       padding-left: 15px;
     }
-    
+
     .reservation-card h3::before {
       content: '';
       position: absolute;
@@ -275,13 +275,13 @@
       background: linear-gradient(to bottom, var(--primary), var(--accent));
       border-radius: 5px;
     }
-    
+
     .reservation-card p {
       margin-bottom: 12px;
       display: flex;
       gap: 10px;
     }
-    
+
     .reservation-card p strong {
       min-width: 140px;
       color: var(--gray);
@@ -289,20 +289,20 @@
       align-items: center;
       gap: 8px;
     }
-    
+
     .reservation-card p strong i {
       color: var(--primary-light);
       width: 20px;
       text-align: center;
     }
-    
+
     .reservation-card ul {
       list-style-type: none;
       margin-top: 15px;
       border-top: 1px dashed var(--light-gray);
       padding-top: 15px;
     }
-    
+
     .reservation-card li {
       padding: 10px 0;
       border-bottom: 1px dashed var(--light-gray);
@@ -310,7 +310,7 @@
       align-items: center;
       gap: 12px;
     }
-    
+
     .reservation-card li::before {
       content: '•';
       color: var(--accent);
@@ -318,7 +318,7 @@
       font-size: 1.5rem;
       line-height: 0;
     }
-    
+
     .badge {
       display: inline-flex;
       align-items: center;
@@ -331,15 +331,15 @@
       margin-left: 8px;
       box-shadow: 0 2px 3px rgba(0,0,0,0.1);
     }
-    
+
     .ds {
       background: var(--primary);
     }
-    
+
     .sw {
       background: var(--danger);
     }
-    
+
     .pin-section {
       background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
       padding: 30px;
@@ -350,7 +350,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .pin-section::before {
       content: '';
       position: absolute;
@@ -361,7 +361,7 @@
       background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
       transform: rotate(30deg);
     }
-    
+
     .pin-section h2 {
       color: white;
       margin-bottom: 20px;
@@ -371,17 +371,17 @@
       position: relative;
       z-index: 1;
     }
-    
+
     .pin-section h2 i {
       color: var(--secondary);
     }
-    
+
     .pin-section label {
       color: rgba(255, 255, 255, 0.9);
       position: relative;
       z-index: 1;
     }
-    
+
     .pin-section input {
       background-color: rgba(255, 255, 255, 0.15);
       border-color: rgba(255, 255, 255, 0.3);
@@ -389,27 +389,27 @@
       position: relative;
       z-index: 1;
     }
-    
+
     .pin-section input::placeholder {
       color: rgba(255, 255, 255, 0.6);
     }
-    
+
     .pin-section input:focus {
       background-color: rgba(255, 255, 255, 0.25);
       border-color: white;
     }
-    
+
     .pin-section .btn {
       background: white;
       color: var(--primary);
       position: relative;
       z-index: 1;
     }
-    
+
     .pin-section .btn:hover {
       background: rgba(255, 255, 255, 0.9);
     }
-    
+
     .stok-form {
       background: white;
       padding: 25px;
@@ -418,7 +418,7 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       border: 1px solid rgba(0,0,0,0.05);
     }
-    
+
     .stok-form h3 {
       display: flex;
       align-items: center;
@@ -428,11 +428,11 @@
       padding-bottom: 10px;
       border-bottom: 2px solid var(--light-gray);
     }
-    
+
     .stok-form h3 i {
       color: var(--primary);
     }
-    
+
     .stok-item {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
@@ -446,23 +446,23 @@
       border: 1px solid var(--light-gray);
       transition: all 0.3s ease;
     }
-    
+
     .stok-item:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     }
-    
+
     .stok-item label {
       margin-bottom: 0;
       font-weight: 500;
       color: var(--dark);
     }
-    
+
     .stok-item .stok-info {
       font-size: 0.9rem;
       color: var(--gray);
     }
-    
+
     .stok-item input {
       width: 100%;
       padding: 10px;
@@ -473,29 +473,29 @@
       color: var(--dark);
       font-weight: 600;
     }
-    
+
     .stok-item input:focus {
       border-color: var(--primary);
       outline: none;
       box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
     }
-    
+
     .stok-actions {
       display: flex;
       justify-content: flex-end;
       margin-top: 25px;
       gap: 15px;
     }
-    
+
     .btn-secondary {
       background: linear-gradient(to right, var(--gray), #5a6268);
       box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
     }
-    
+
     .btn-secondary:hover {
       background: linear-gradient(to right, #5a6268, #6c757d);
     }
-    
+
     .empty-state {
       text-align: center;
       padding: 50px 20px;
@@ -504,19 +504,19 @@
       border-radius: 12px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
-    
+
     .empty-state i {
       font-size: 4rem;
       color: var(--light-gray);
       margin-bottom: 20px;
       opacity: 0.7;
     }
-    
+
     .empty-state p {
       font-size: 1.2rem;
       color: var(--gray);
     }
-    
+
     .notification {
       position: fixed;
       bottom: 30px;
@@ -534,19 +534,19 @@
       backdrop-filter: blur(5px);
       border: 1px solid rgba(255,255,255,0.2);
     }
-    
+
     .notification.success {
       background: linear-gradient(to right, rgba(75, 181, 67, 0.9), rgba(67, 160, 71, 0.9));
     }
-    
+
     .notification.error {
       background: linear-gradient(to right, rgba(231, 111, 81, 0.9), rgba(207, 92, 54, 0.9));
     }
-    
+
     .notification i {
       font-size: 1.5rem;
     }
-    
+
     @keyframes slideIn {
       from {
         transform: translateX(100px);
@@ -557,73 +557,120 @@
         opacity: 1;
       }
     }
-    
+
+    .share-button-container {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+    }
+
+    .share-button {
+      background: var(--accent);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .share-button:hover {
+      background: var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 7px 12px rgba(0,0,0,0.3);
+    }
+
+    .share-button i {
+      font-size: 1.2rem;
+    }
+
     @media (max-width: 768px) {
       .container {
         padding: 15px;
       }
-      
+
       .main-card {
         padding: 20px;
       }
-      
+
       h1 {
         font-size: 2rem;
       }
-      
+
       h2 {
         font-size: 1.5rem;
       }
-      
+
       h3 {
         font-size: 1.2rem;
       }
-      
+
       .checkbox-group {
         flex-direction: column;
         gap: 10px;
       }
-      
+
       .reservation-card p {
         flex-direction: column;
         gap: 5px;
       }
-      
+
       .reservation-card p strong {
         min-width: auto;
       }
-      
+
       .stok-item {
         grid-template-columns: 1fr;
         gap: 10px;
       }
-      
+
       .stok-item input {
         max-width: 100%;
       }
-      
+
       .stok-actions {
         flex-direction: column;
       }
-      
+
       .btn {
         width: 100%;
       }
+
+      .share-button-container {
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+      }
+
+      .share-button {
+        width: 100%;
+        padding: 12px;
+        font-size: 0.9rem;
+      }
     }
-    
+
     @media (max-width: 480px) {
       .btn {
         padding: 15px;
       }
-      
+
       .pin-section {
         padding: 20px;
       }
-      
+
       .stok-form {
         padding: 15px;
       }
-      
+
       .notification {
         max-width: calc(100% - 40px);
         right: 20px;
@@ -652,27 +699,27 @@
 
       <form id="reservationForm">
         <h2><i class="fas fa-calendar-plus"></i> Form Reservasi</h2>
-        
+
         <div class="form-group">
           <label for="nama"><i class="fas fa-user"></i> Nama Reservasi</label>
           <input type="text" id="nama" required placeholder="Masukkan nama reservasi">
         </div>
-        
+
         <div class="form-group">
           <label for="jam"><i class="fas fa-clock"></i> Jam Reservasi</label>
           <input type="time" id="jam" required>
         </div>
-        
+
         <div class="form-group">
           <label for="peserta"><i class="fas fa-users"></i> Jumlah Peserta</label>
           <input type="number" id="peserta" min="1" required placeholder="Jumlah peserta">
         </div>
-        
+
         <div class="form-group">
           <label for="jumlahLauk"><i class="fas fa-drumstick-bite"></i> Jumlah Variasi Lauk</label>
           <input type="number" id="jumlahLauk" min="0" required placeholder="Jumlah variasi lauk">
         </div>
-        
+
         <div class="form-group">
           <label><i class="fas fa-plus-circle"></i> Menu Tambahan</label>
           <div class="checkbox-group">
@@ -682,7 +729,7 @@
             <label><input type="checkbox" id="menuTeh"> <i class="fas fa-mug-hot"></i> Teh</label>
           </div>
         </div>
-        
+
         <div class="form-group">
           <label for="tempat"><i class="fas fa-map-marker-alt"></i> Tempat yang Dipilih</label>
           <select id="tempat" required>
@@ -699,12 +746,12 @@
             <option value="Gubug 3">Gubug 3</option>
           </select>
         </div>
-        
+
         <div class="form-group">
           <label for="request"><i class="fas fa-comment-dots"></i> Request Tambahan</label>
           <textarea id="request" rows="3" placeholder="Masukkan request tambahan jika ada"></textarea>
         </div>
-        
+
         <button type="submit" class="btn"><i class="fas fa-plus"></i> Tambah Reservasi</button>
       </form>
     </div>
@@ -718,6 +765,12 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="share-button-container">
+    <button class="share-button" onclick="shareReservations()">
+      <i class="fas fa-share-alt"></i> Bagikan Data Reservasi
+    </button>
   </div>
 
   <script>
@@ -776,7 +829,7 @@
         stokGlobal[kategori][index].stok = parseInt(input.value);
       }
       localStorage.setItem("stokData", JSON.stringify(stokGlobal));
-      
+
       showNotification('success', 'Stok berhasil diperbarui!');
       document.getElementById("stokForm").style.display = "none";
     }
@@ -793,7 +846,7 @@
     function tampilkanFormStok() {
       const container = document.getElementById("stokForm");
       container.innerHTML = "";
-      
+
       for (let kategori in stokGlobal) {
         const judul = document.createElement("h3");
         judul.innerHTML = `<i class="fas fa-${getIconByCategory(kategori)}"></i> ${kategori.toUpperCase()}`;
@@ -815,25 +868,25 @@
 
       const stokActions = document.createElement("div");
       stokActions.className = "stok-actions";
-      
+
       const cancelBtn = document.createElement("button");
       cancelBtn.className = "btn btn-secondary";
       cancelBtn.innerHTML = `<i class="fas fa-times"></i> Batal`;
       cancelBtn.onclick = () => {
         document.getElementById("stokForm").style.display = "none";
       };
-      
+
       const simpanBtn = document.createElement("button");
       simpanBtn.className = "btn";
       simpanBtn.innerHTML = `<i class="fas fa-save"></i> Simpan Stok`;
       simpanBtn.onclick = simpanStokBaru;
-      
+
       stokActions.appendChild(cancelBtn);
       stokActions.appendChild(simpanBtn);
       container.appendChild(stokActions);
       container.style.display = "block";
     }
-    
+
     function getIconByCategory(kategori) {
       switch(kategori) {
         case 'lauk': return 'drumstick-bite';
@@ -886,7 +939,7 @@
       reservations.push(reservasi);
       tampilkanReservasi();
       this.reset();
-      
+
       showNotification('success', 'Reservasi berhasil ditambahkan!');
     });
 
@@ -934,7 +987,7 @@
 
     function tampilkanReservasi() {
       const list = document.getElementById("reservationsList");
-      
+
       if (reservations.length === 0) {
         list.innerHTML = `
           <div class="empty-state">
@@ -944,7 +997,7 @@
         `;
         return;
       }
-      
+
       list.innerHTML = "";
       reservations.forEach((r, i) => {
         const div = document.createElement("div");
@@ -962,7 +1015,7 @@
         list.appendChild(div);
       });
     }
-    
+
     function showNotification(type, message) {
       const notification = document.createElement('div');
       notification.className = `notification ${type}`;
@@ -971,13 +1024,42 @@
         <span>${message}</span>
       `;
       document.body.appendChild(notification);
-      
+
       setTimeout(() => {
         notification.style.transition = 'all 0.5s ease';
         notification.style.opacity = '0';
         notification.style.transform = 'translateX(100px)';
         setTimeout(() => notification.remove(), 500);
       }, 3000);
+    }
+
+    function shareReservations() {
+      if (reservations.length === 0) {
+        showNotification('error', 'Belum ada data reservasi untuk dibagikan.');
+        return;
+      }
+
+      let emailBody = "Berikut adalah data alokasi Reservasi Dolan Sawah:\n\n";
+      reservations.forEach((r, i) => {
+        emailBody += `Reservasi ${i + 1}:\n`;
+        emailBody += `  Nama: ${r.nama}\n`;
+        emailBody += `  Jam: ${r.jam}\n`;
+        emailBody += `  Tempat: ${r.tempat}\n`;
+        emailBody += `  Peserta: ${r.peserta}\n`;
+        emailBody += `  Variasi Lauk: ${r.jumlahLauk}\n`;
+        if (r.request) {
+          emailBody += `  Request Tambahan: ${r.request}\n`;
+        }
+        emailBody += `  Alokasi Peralatan:\n`;
+        r.alokasi.forEach(a => {
+          emailBody += `    - ${a.replace(/<[^>]*>/g, '')}\n`;
+        });
+        emailBody += "\n";
+      });
+
+      const subject = "Data Alokasi Reservasi Dolan Sawah";
+      const mailtoLink = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+      window.location.href = mailtoLink;
     }
   </script>
 </body>
