@@ -947,41 +947,72 @@
       const alokasi = [];
       let sisaLauk = jumlahLauk;
 
-      for (let alat of stok.lauk) {
-        while (sisaLauk > 0 && peserta <= alat.kapasitas && alat.stok > 0) {
-          alokasi.push(`${alat.nama} <span class="badge ds">DS</span>`);
-          alat.stok--;
+      // Urutkan peralatan dari kapasitas terkecil ke terbesar untuk efisiensi
+      const sortedLauk = [...stok.lauk].sort((a, b) => a.kapasitas - b.kapasitas);
+      const sortedNasi = [...stok.nasi].sort((a, b) => a.kapasitas - b.kapasitas);
+      const sortedSup = [...stok.sup].sort((a, b) => a.kapasitas - b.kapasitas);
+      const sortedEs = [...stok.es].sort((a, b) => a.kapasitas - b.kapasitas);
+      const sortedTeh = [...stok.teh].sort((a, b) => a.kapasitas - b.kapasitas);
+
+      // Alokasi lauk - cari ukuran yang paling sesuai
+      while (sisaLauk > 0) {
+        let alatTerbaik = null;
+        
+        // Cari alat dengan kapasitas terkecil yang masih mencukupi
+        for (let alat of sortedLauk) {
+          if (peserta <= alat.kapasitas && (alat.stok > 0 || alatTerbaik === null)) {
+            alatTerbaik = alat;
+            if (alat.stok > 0) break; // Prioritaskan yang ada stoknya
+          }
+        }
+
+        if (alatTerbaik) {
+          if (alatTerbaik.stok > 0) {
+            alokasi.push(`${alatTerbaik.nama} <span class="badge ds">DS</span>`);
+            alatTerbaik.stok--;
+          } else {
+            alokasi.push(`${alatTerbaik.nama} <span class="badge sw">SW</span>`);
+          }
+          sisaLauk--;
+        } else {
+          // Jika tidak ada yang cocok, gunakan yang terbesar
+          const alatTerbesar = sortedLauk[sortedLauk.length - 1];
+          alokasi.push(`${alatTerbesar.nama} <span class="badge sw">SW</span>`);
           sisaLauk--;
         }
       }
 
-      for (let alat of stok.lauk) {
-        while (sisaLauk > 0 && peserta <= alat.kapasitas) {
-          alokasi.push(`${alat.nama} <span class="badge sw">SW</span>`);
-          sisaLauk--;
-        }
-      }
-
-      if (menu.nasi) alokasi.push(cekAlat(peserta, stok.nasi, "magicom"));
-      if (menu.sup) alokasi.push(cekAlat(peserta, stok.sup, "pemanas sup"));
-      if (menu.es) alokasi.push(cekAlat(peserta, stok.es, "tempat es"));
-      if (menu.teh) alokasi.push(cekAlat(peserta, stok.teh, "dispenser teh"));
+      // Alokasi peralatan lain dengan ukuran yang sesuai
+      if (menu.nasi) alokasi.push(cekAlatOptimal(peserta, sortedNasi, "magicom"));
+      if (menu.sup) alokasi.push(cekAlatOptimal(peserta, sortedSup, "pemanas sup"));
+      if (menu.es) alokasi.push(cekAlatOptimal(peserta, sortedEs, "tempat es"));
+      if (menu.teh) alokasi.push(cekAlatOptimal(peserta, sortedTeh, "dispenser teh"));
 
       return alokasi;
     }
 
-    function cekAlat(peserta, daftar, namaAlat) {
-      for (let alat of daftar) {
+    function cekAlatOptimal(peserta, daftarAlat, namaAlat) {
+      // Cari alat dengan kapasitas terkecil yang mencukupi dan ada stok
+      for (let alat of daftarAlat) {
         if (peserta <= alat.kapasitas && alat.stok > 0) {
           alat.stok--;
           return `${alat.nama} <span class="badge ds">DS</span>`;
         }
       }
-      for (let alat of daftar) {
+      
+      // Jika tidak ada stok, cari ukuran yang paling sesuai
+      for (let alat of daftarAlat) {
         if (peserta <= alat.kapasitas) {
           return `${alat.nama} <span class="badge sw">SW</span>`;
         }
       }
+      
+      // Jika tidak ada yang mencukupi, gunakan yang terbesar
+      if (daftarAlat.length > 0) {
+        const alatTerbesar = daftarAlat[daftarAlat.length - 1];
+        return `${alatTerbesar.nama} <span class="badge sw">SW</span>`;
+      }
+      
       return `Tambahan ${namaAlat} <span class="badge sw">SW</span>`;
     }
 
